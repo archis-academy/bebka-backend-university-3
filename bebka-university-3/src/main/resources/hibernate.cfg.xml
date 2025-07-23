@@ -19,7 +19,8 @@
 
         <!-- Entity sınıfı -->
         <mapping class="com.archisacademy.model.Student"/>
-        <mapping class="com.archisacademy.model.Course"/>
+        <mapping class="com.archisacademy.model.Course"
+        <mapping class="com.archisacademy.model.Instructor"/>
 
     </session-factory>
 </hibernate-configuration>
