@@ -16,11 +16,7 @@ public class Student {
     private String email;
     private String password;
 
-    @ManyToMany
-    @JoinTable (name = "student_courses",
-    joinColumns = @JoinColumn(name = "student_id"),
-    inverseJoinColumns = @JoinColumn(name = "course_id"))
-
+    @ManyToMany(mappedBy = "savedStudents")
     private List<Course> enrolledCourses;
 
     public Student(){}

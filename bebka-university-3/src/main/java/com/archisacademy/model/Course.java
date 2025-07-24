@@ -2,6 +2,8 @@ package com.archisacademy.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "courses")
 public class Course {
@@ -17,14 +19,19 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private Instructor courseInstructor;
-
-    //private Instructor courseInstructor;
-    //private List<Student> enrolledStudents;
+    @ManyToMany
+    @JoinTable(
+            name = "course_student", // Ara tablo
+            joinColumns = @JoinColumn(name = "course_id"), // Bu tablonun id'si
+            inverseJoinColumns = @JoinColumn(name = "student_id") // Diğer tablonun id'si
+    )
+    private List<Student> enrolledStudents;
     public Course() {}
 
-    public Course(String courseName, long courseNumber){
+    public Course(String courseName, long courseNumber,List<Student> enrolledStudents) {
         this.courseName = courseName;
         this.courseNumber = courseNumber;
+        this.enrolledStudents = enrolledStudents;
     }
 
     public long getId() {

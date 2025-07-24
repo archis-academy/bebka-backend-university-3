@@ -26,7 +26,7 @@ public class Instructor {
         this.instructorNumber = instructorNumber;
         this.email = email;
         this.password = password;
-        //this.taughtCourses = new ArrayList<>();
+        this.taughtCourses = new ArrayList<>();
         }
 
     public long getId() {
