@@ -13,9 +13,13 @@ public class Course {
     @Column(name = "course_number", unique = true, nullable = false)
     private long courseNumber;
 
+    //SINIFLAR ARASI İLİŞKİLER
+    @ManyToOne
+    @JoinColumn(name = "instructor_id")
+    private Instructor courseInstructor;
+
     //private Instructor courseInstructor;
     //private List<Student> enrolledStudents;
-
     public Course() {}
 
     public Course(String courseName, long courseNumber){

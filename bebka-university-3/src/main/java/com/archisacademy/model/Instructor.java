@@ -3,6 +3,7 @@ package com.archisacademy.model;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "instructors")
@@ -15,7 +16,8 @@ public class Instructor {
     private String email;
     private String password;
 
-    //private List<Course> taughtCourses;
+    @OneToMany(mappedBy = "courseInstructor", cascade =CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Course> taughtCourses;
 
     public Instructor() {}
 
@@ -25,7 +27,7 @@ public class Instructor {
         this.email = email;
         this.password = password;
         //this.taughtCourses = new ArrayList<>();
-    }
+        }
 
     public long getId() {
         return id;
