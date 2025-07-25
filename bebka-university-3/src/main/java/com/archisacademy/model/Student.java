@@ -16,7 +16,7 @@ public class Student {
     private String email;
     private String password;
 
-    @ManyToMany(mappedBy = "savedStudents")
+    @ManyToMany(mappedBy = "enrolledStudents")
     private List<Course> enrolledCourses;
 
     public Student(){}
