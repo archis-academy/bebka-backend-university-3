@@ -47,7 +47,7 @@ public class Student {
 
     public long getStudentNumber() {
         return studentNumber;
-    }
+    }x
 
     public void setStudentNumber(long studentNumber) {
         this.studentNumber = studentNumber;
