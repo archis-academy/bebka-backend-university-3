@@ -11,7 +11,9 @@ public class Instructor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "instructor_name",nullable = false)
     private String instructorName;
+    @Column(name = "instructor_number",unique = true)
     private long instructorNumber;
     private String email;
     private String password;

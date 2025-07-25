@@ -7,19 +7,12 @@ import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.List;
+
 
 public class InstructorDaoImpl implements InstructorDao {
 
     @Override
-    public void addInstructor(long instructorNumber, String instructorName, String email, List<Course> taughtCourses) {
-        // 1. Instructor nesnesi oluştur
-        Instructor instructor = new Instructor();
-        instructor.setInstructorNumber(instructorNumber);
-        instructor.setInstructorName(instructorName);
-        instructor.setEmail(email);
-        instructor.setTaughtCourses(taughtCourses);
-
+    public void createInstructor(Instructor instructor) {
         // 2. Hibernate Session ve Transaction başlat
         Transaction transaction = null;
 
@@ -39,3 +32,4 @@ public class InstructorDaoImpl implements InstructorDao {
         }
     }
 }
+
