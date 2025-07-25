@@ -2,6 +2,7 @@ package com.archisacademy.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,10 +29,10 @@ public class Course {
     private List<Student> enrolledStudents;
     public Course() {}
 
-    public Course(String courseName, long courseNumber,List<Student> enrolledStudents) {
+    public Course(String courseName, long courseNumber) {
         this.courseName = courseName;
         this.courseNumber = courseNumber;
-        this.enrolledStudents = enrolledStudents;
+        this.enrolledStudents = new ArrayList<>();
     }
 
     public long getId() {
