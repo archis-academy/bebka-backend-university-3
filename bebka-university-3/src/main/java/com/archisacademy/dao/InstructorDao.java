@@ -9,4 +9,5 @@ import java.util.List;
 public interface InstructorDao {
 
     void createInstructor(Instructor instructor);
+    void deleteInstructor(long instructorNumber);
 }
