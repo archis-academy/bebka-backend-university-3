@@ -15,4 +15,8 @@ public class InstructorService {
             Instructor instructor=new Instructor(instructorName,instructorNumber,email,password);
             instructorDao.createInstructor(instructor);
     }
+
+    public void deleteInstructor(long instructorNumber) {
+        instructorDao.deleteInstructor(instructorNumber);
+    }
 }

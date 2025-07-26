@@ -31,5 +31,29 @@ public class InstructorDaoImpl implements InstructorDao {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void deleteInstructor(long instructorNumber) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+
+            //instructorNumber'a göre instructor bulma
+            Instructor instructor = session.createQuery(
+                            "FROM Instructor WHERE instructorNumber = :instructorNumber", Instructor.class)
+                    .setParameter("instructorNumber", instructorNumber)
+                    .uniqueResult();
+            if  (instructor != null) {
+                session.delete(instructor);
+            } else {
+                System.out.println("Eğitmen bulunamadı!");
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null)
+                tx.rollback();
+            e.printStackTrace();
+        }
+    }
 }
 
