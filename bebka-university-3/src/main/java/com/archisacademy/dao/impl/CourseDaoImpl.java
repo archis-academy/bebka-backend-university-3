@@ -15,6 +15,7 @@ public class CourseDaoImpl implements CourseDao {
             transaction = session.beginTransaction();
             session.save(course);
             transaction.commit();
+            System.out.println("Course added successfully.");
         } catch(Exception e) {
             if(transaction != null) {
                 transaction.rollback();
@@ -23,4 +24,32 @@ public class CourseDaoImpl implements CourseDao {
         }
         return course;
     }
+
+    @Override
+    public void updateCourse(Course course) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Course existingCourse = session.createQuery(
+                            "FROM Course WHERE courseNumber = :courseNumber", Course.class)
+                    .setParameter("courseNumber", course.getCourseNumber())
+                    .uniqueResult();
+
+            if (existingCourse != null) {
+                existingCourse.setCourseName(course.getCourseName());
+                existingCourse.setCourseInstructor(course.getCourseInstructor());
+                session.update(existingCourse);
+                System.out.println("Course updated successfully.");
+            } else {
+                System.out.println("Course with number " + course.getCourseNumber() + " not found.");
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
+    }
+
 }
