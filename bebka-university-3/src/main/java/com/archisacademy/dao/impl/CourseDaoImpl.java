@@ -6,6 +6,9 @@ import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CourseDaoImpl implements CourseDao {
 
     @Override
@@ -22,5 +25,22 @@ public class CourseDaoImpl implements CourseDao {
             e.printStackTrace();
         }
         return course;
+    }
+
+    @Override
+    public List<Course> getAllCourses() {
+        Transaction tx = null;
+        List<Course> courses = null;
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            courses = session.createQuery("from Course").list();
+            tx.commit();
+        } catch(Exception e) {
+            if(tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+        return courses;
     }
 }
