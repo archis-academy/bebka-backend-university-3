@@ -10,4 +10,5 @@ public interface InstructorDao {
 
     void createInstructor(Instructor instructor);
     void deleteInstructor(long instructorNumber);
+    void updateInstructor(long instructorNumber, String newInstructorName, String newEmail);
 }

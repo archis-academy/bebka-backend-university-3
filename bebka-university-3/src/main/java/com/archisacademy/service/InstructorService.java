@@ -19,4 +19,9 @@ public class InstructorService {
     public void deleteInstructor(long instructorNumber) {
         instructorDao.deleteInstructor(instructorNumber);
     }
+
+    public void updateInstructor(long instructorNumber, String newInstructorName, String newEmail) {
+        instructorDao.updateInstructor(instructorNumber, newInstructorName, newEmail);
+    }
+
 }

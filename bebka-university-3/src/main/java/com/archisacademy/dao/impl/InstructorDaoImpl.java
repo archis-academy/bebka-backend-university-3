@@ -55,5 +55,36 @@ public class InstructorDaoImpl implements InstructorDao {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void updateInstructor(long instructorNumber, String newInstructorName, String newEmail) {
+        Transaction transaction = null;
+
+        try( Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+
+            Instructor instructor = session.createQuery(
+                    "FROM Instructor WHERE instructorNumber = :instructorNumber", Instructor.class)
+                    .setParameter("instructorNumber", instructorNumber)
+                    .uniqueResult();
+
+            if(instructor != null){
+                instructor.setInstructorName(newInstructorName);
+                instructor.setEmail(newEmail);
+
+                session.update(instructor);
+
+                System.out.println("Eğitmen güncellendi");
+            } else {
+                System.out.println("Eğitmen bulunamadı");
+            }
+
+            transaction.commit();;
+
+        } catch (Exception e){
+            if(transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
+    }
 }
 
