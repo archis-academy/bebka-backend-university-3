@@ -58,7 +58,7 @@ public class Course {
     public void setCourseNumber(long courseNumber) {
         this.courseNumber = courseNumber;
     }
-/*
+
     public Instructor getCourseInstructor() {
         return courseInstructor;
     }
@@ -74,5 +74,5 @@ public class Course {
     public void setEnrolledStudents(List<Student> enrolledStudents) {
         this.enrolledStudents = enrolledStudents;
     }
- */
+
 }
