@@ -23,7 +23,7 @@ public class CourseService {
         courseDao.updateCourse(course);
     }
 
-    public void deleteCourseById(String courseId)
+    public void deleteCourseById(long courseId)
     {
         courseDao.deleteCourseById(courseId);
     }
