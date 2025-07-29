@@ -61,9 +61,17 @@ public class InstructorDaoImpl implements InstructorDao {
     @Override
     public List<Instructor> getAllInstructors() {
         List<Instructor> instructors = null;
-
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             instructors = session.createQuery("FROM Instructor", Instructor.class).getResultList();
+            if (instructors != null && !instructors.isEmpty()) {
+                System.out.println("Veritabanından çekilen eğitmenler:");
+                for (Instructor instructor : instructors) {
+                    System.out.println(instructor);
+                }
+            } else {
+                System.out.println("Sistemde kayıtlı eğitmen bulunamadı.");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
