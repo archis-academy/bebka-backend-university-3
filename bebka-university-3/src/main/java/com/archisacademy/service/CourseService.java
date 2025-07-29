@@ -2,6 +2,7 @@ package com.archisacademy.service;
 
 import com.archisacademy.dao.CourseDao;
 import com.archisacademy.model.Course;
+import com.archisacademy.model.Instructor;
 
 import java.util.List;
 
@@ -12,15 +13,37 @@ public class CourseService {
         this.courseDao = courseDao;
     }
 
-    public Course addCourse(String courseName, long courseNumber) {
-        if(courseName == null || courseNumber <= 0){
-            return null;
-        }
+    public Course addCourse(String courseName, long courseNumber, Instructor instructor) {
         Course course = new Course(courseName, courseNumber);
+        course.setCourseInstructor(instructor);
         return courseDao.addCourse(course);
     }
 
+    public void updateCourse(String courseName, long courseNumber, Instructor instructor) {
+        Course course = new Course(courseName, courseNumber);
+        course.setCourseInstructor(instructor);
+        courseDao.updateCourse(course);
+    }
+
+    public void deleteCourseById(long courseId)
+    {
+        courseDao.deleteCourseById(courseId);
+    }
+
+
     public List<Course> getAllCourses(){
-        return courseDao.getAllCourses();
+        List<Course> courses = courseDao.getAllCourses();
+        System.out.printf(" %-15s | %-15s | %-15s \n",
+                "Kurs Adı", "Kurs No", "Eğitmen Adı");
+        System.out.println("-----------------------------------------------------");
+        for (Course course : courses) {
+            String instructorName = course.getCourseInstructor().getInstructorName();
+            System.out.printf(" %-15s | %-15d | %-15s \n",
+                    course.getCourseName(),
+                    course.getCourseNumber(),
+                    instructorName
+            );
+        }
+        return courses;
     }
 }
