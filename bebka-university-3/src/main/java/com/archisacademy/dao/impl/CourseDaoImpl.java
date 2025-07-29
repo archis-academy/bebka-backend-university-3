@@ -52,4 +52,31 @@ public class CourseDaoImpl implements CourseDao {
         }
     }
 
+    @Override
+    public void deleteCourseById(long courseId) {
+        Session session = null;
+        Transaction transaction = null;
+        
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+
+            Course course = session.get(Course.class, courseId);
+            if (course != null) {
+                session.delete(course);
+                System.out.println("Kurs başarıyla silindi. ID: " + courseId);
+            } else {
+                System.out.println("Kurs bulunamadı. ID: " + courseId);
+            }
+
+            transaction.commit();
+
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            System.err.println("Kurs silinirken hata oluştu: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (session != null) session.close();
+        }
+    }
 }
