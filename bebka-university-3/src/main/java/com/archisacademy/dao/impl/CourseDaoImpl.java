@@ -56,14 +56,7 @@ public class CourseDaoImpl implements CourseDao {
     public void deleteCourseById(long courseId) {
         Session session = null;
         Transaction transaction = null;
-
-        try {
-
-        } catch (NumberFormatException e) {
-            System.out.println("Geçersiz courseId formatı: " + courseId);
-            return;
-        }
-
+        
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
