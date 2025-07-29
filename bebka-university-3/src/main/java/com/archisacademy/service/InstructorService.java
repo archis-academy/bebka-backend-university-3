@@ -3,6 +3,8 @@ package com.archisacademy.service;
 import com.archisacademy.dao.InstructorDao;
 import com.archisacademy.model.Instructor;
 
+import java.util.List;
+
 public class InstructorService {
 
     private final InstructorDao instructorDao;
@@ -18,5 +20,10 @@ public class InstructorService {
 
     public void deleteInstructor(long instructorNumber) {
         instructorDao.deleteInstructor(instructorNumber);
+    }
+
+    public List<Instructor> getAllInsturctors()
+    {
+        return instructorDao.getAllInstructors();
     }
 }

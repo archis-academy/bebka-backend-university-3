@@ -6,7 +6,9 @@ import com.archisacademy.model.Instructor;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import java.util.List;
 
 
 public class InstructorDaoImpl implements InstructorDao {
@@ -54,6 +56,19 @@ public class InstructorDaoImpl implements InstructorDao {
                 tx.rollback();
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<Instructor> getAllInstructors() {
+        List<Instructor> instructors = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            instructors = session.createQuery("FROM Instructor", Instructor.class).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return instructors;
     }
 }
 

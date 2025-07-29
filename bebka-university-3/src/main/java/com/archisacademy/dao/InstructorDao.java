@@ -10,4 +10,5 @@ public interface InstructorDao {
 
     void createInstructor(Instructor instructor);
     void deleteInstructor(long instructorNumber);
+    List<Instructor>getAllInstructors();
 }
