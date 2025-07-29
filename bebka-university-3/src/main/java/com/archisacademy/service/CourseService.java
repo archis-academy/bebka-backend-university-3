@@ -22,4 +22,10 @@ public class CourseService {
         course.setCourseInstructor(instructor);
         courseDao.updateCourse(course);
     }
+
+    public void deleteCourseById(String courseId)
+    {
+        courseDao.deleteCourseById(courseId);
+    }
+
 }
