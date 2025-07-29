@@ -1,4 +1,7 @@
 package com.archisacademy.service;
 
-public class StudentService {
+import com.archisacademy.dto.StudentDto;
+
+public interface StudentService {
+    String addStudent(StudentDto studentDto);
 }

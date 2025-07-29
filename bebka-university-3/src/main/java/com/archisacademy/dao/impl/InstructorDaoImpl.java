@@ -1,7 +1,6 @@
 package com.archisacademy.dao.impl;
 
 import com.archisacademy.dao.InstructorDao;
-import com.archisacademy.model.Course;
 import com.archisacademy.model.Instructor;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;

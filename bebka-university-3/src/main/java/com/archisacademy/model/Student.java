@@ -1,33 +1,40 @@
 package com.archisacademy.model;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
 @Entity
-@Table(name="Students")
+@Table(name="students")
 public class Student {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name= "student_name")
-    private String name;
-    private long studentNumber;
+
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "student_number", unique = true)
+    private String studentNumber;
+
+    @Column(unique = true)
     private String email;
+
     private String password;
 
-    @ManyToMany(mappedBy = "enrolledStudents")
-    private List<Course> enrolledCourses;
+    @ManyToMany(mappedBy = "enrolledStudents", fetch = FetchType.LAZY)
+    private List<Course> enrolledCourses = new ArrayList<>();
 
-    public Student(){}
-    public Student(long id, String name, long studentNumber, String email, String password){
-        this.id=id;
-        this.name=name;
-        this.studentNumber=studentNumber;
-        this.email=email;
-        this.password=password;
-        this.enrolledCourses=new ArrayList<>();
+    public Student() {}
+
+    public Student(String fullName, String studentNumber, String email, String password) {
+        this.fullName = fullName;
+        this.studentNumber = studentNumber;
+        this.email = email;
+        this.password = password;
     }
+
 
     public long getId() {
         return id;
@@ -37,19 +44,19 @@ public class Student {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public long getStudentNumber() {
+    public String getStudentNumber() {
         return studentNumber;
     }
 
-    public void setStudentNumber(long studentNumber) {
+    public void setStudentNumber(String studentNumber) {
         this.studentNumber = studentNumber;
     }
 
@@ -73,5 +80,7 @@ public class Student {
         return enrolledCourses;
     }
 
-
+    public void setEnrolledCourses(List<Course> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
+    }
 }
