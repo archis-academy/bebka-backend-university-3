@@ -70,4 +70,12 @@ public class Instructor {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void setTaughtCourses(List<Course> taughtCourses) {
+        this.taughtCourses = taughtCourses;
+    }
+    public List<Course> getTaughtCourses() {
+        return taughtCourses;
+    }
+
 }

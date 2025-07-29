@@ -7,6 +7,7 @@ import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.List;
 
 
 public class InstructorDaoImpl implements InstructorDao {
@@ -86,5 +87,40 @@ public class InstructorDaoImpl implements InstructorDao {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Instructor> getAllInstructors() {
+        List<Instructor> instructors = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            instructors = session.createQuery("FROM Instructor", Instructor.class).getResultList();
+
+            if (instructors != null ) {
+                System.out.println("Veritabanından çekilen eğitmenler:");
+                for (Instructor instructor : instructors) {
+                    System.out.println("Eğitmen: " + instructor.getInstructorName() +
+                            ", Numarası: " + instructor.getInstructorNumber() +
+                            ", Email: " + instructor.getEmail());
+
+                    List<Course> courses = instructor.getTaughtCourses();
+                    if (courses != null && !courses.isEmpty()) {
+                        for (Course course : courses) {
+                            System.out.println("    Kurs: " + course.getCourseName());
+                        }
+                    } else {
+                        System.out.println("    Bu eğitmenin henüz dersi yok.");
+                    }
+                }
+            } else {
+                System.out.println("Sistemde kayıtlı eğitmen bulunamadı.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return instructors;
+    }
+
 }
 
