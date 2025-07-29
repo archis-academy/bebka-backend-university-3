@@ -66,7 +66,10 @@ public class InstructorDaoImpl implements InstructorDao {
             if (instructors != null && !instructors.isEmpty()) {
                 System.out.println("Veritabanından çekilen eğitmenler:");
                 for (Instructor instructor : instructors) {
-                    System.out.println(instructor);
+                    // Eğer Instructor.toString() yoksa aşağıdaki gibi yazdırabilirsin:
+                    System.out.println("Eğitmen: " + instructor.getInstructorName() + " " + instructor.getEmail()
+                            + ", Email: " + instructor.getEmail());
+
                 }
             } else {
                 System.out.println("Sistemde kayıtlı eğitmen bulunamadı.");
