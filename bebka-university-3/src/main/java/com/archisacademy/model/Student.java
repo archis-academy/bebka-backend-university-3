@@ -1,9 +1,9 @@
 package com.archisacademy.model;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
 @Entity
 @Table(name="Students")
 public class Student {
@@ -12,33 +12,21 @@ public class Student {
     private long id;
     @Column(name= "student_name")
     private String name;
+    @Column(name = "student_number",nullable = false, unique = true)
     private long studentNumber;
     private String email;
     private String password;
 
-    @ManyToMany
-    @JoinTable (name = "student_courses",
-    joinColumns = @JoinColumn(name = "student_id"),
-    inverseJoinColumns = @JoinColumn(name = "course_id"))
-
+    @ManyToMany(mappedBy = "enrolledStudents")
     private List<Course> enrolledCourses;
 
     public Student(){}
-    public Student(long id, String name, long studentNumber, String email, String password){
-        this.id=id;
+    public Student( String name, long studentNumber, String email, String password){
         this.name=name;
         this.studentNumber=studentNumber;
         this.email=email;
         this.password=password;
         this.enrolledCourses=new ArrayList<>();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
