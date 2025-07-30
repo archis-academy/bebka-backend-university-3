@@ -20,7 +20,7 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private Instructor courseInstructor;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "course_student", // Ara tablo
             joinColumns = @JoinColumn(name = "course_id"), // Bu tablonun id'si

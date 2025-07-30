@@ -12,7 +12,7 @@ import org.hibernate.Transaction;
 public class InstructorDaoImpl implements InstructorDao {
 
     @Override
-    public void createInstructor(Instructor instructor) {
+    public Instructor createInstructor(Instructor instructor) {
         // 2. Hibernate Session ve Transaction başlat
         Transaction transaction = null;
 
@@ -30,6 +30,7 @@ public class InstructorDaoImpl implements InstructorDao {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
         }
+        return  instructor;
     }
 
     @Override
