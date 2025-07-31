@@ -8,5 +8,5 @@ import java.util.List;
 public interface StudentDao {
     Student createStudent(Student student);
 
-    void updateStudent(long studentNumber, String newFullName, String newEmail, List<Course> newEnrolledCourses);
+    void updateStudent(long studentNumber, String newFullName, String newEmail);
 }

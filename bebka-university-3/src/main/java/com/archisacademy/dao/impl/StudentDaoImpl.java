@@ -30,7 +30,7 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
-    public void updateStudent(long studentNumber, String newFullName, String newEmail, List<Course> newEnrolledCourses) {
+    public void updateStudent(long studentNumber, String newFullName, String newEmail) {
         Transaction transaction = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -42,8 +42,7 @@ public class StudentDaoImpl implements StudentDao {
             if (student != null) {
                 student.setName(newFullName);
                 student.setEmail(newEmail);
-                student.getEnrolledCourses().clear();
-                student.getEnrolledCourses().addAll(newEnrolledCourses);
+
 
                 transaction = session.beginTransaction();
 

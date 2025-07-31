@@ -29,7 +29,7 @@ public class StudentService {
     }
 
     public void updateStudent(long studentNumber, String newFullName, String newEmail, List<Course> newEnrolledCourses) {
-        studentDao.updateStudent(studentNumber, newFullName, newEmail, newEnrolledCourses);
+        studentDao.updateStudent(studentNumber, newFullName, newEmail);
     }
 
 }
