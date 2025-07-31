@@ -4,6 +4,8 @@ import com.archisacademy.dao.CourseDao;
 import com.archisacademy.model.Course;
 import com.archisacademy.model.Instructor;
 
+import java.util.List;
+
 public class CourseService {
     private final CourseDao courseDao;
 
@@ -28,4 +30,20 @@ public class CourseService {
         courseDao.deleteCourseById(courseId);
     }
 
+
+    public List<Course> getAllCourses(){
+        List<Course> courses = courseDao.getAllCourses();
+        System.out.printf(" %-15s | %-15s | %-15s \n",
+                "Kurs Adı", "Kurs No", "Eğitmen Adı");
+        System.out.println("-----------------------------------------------------");
+        for (Course course : courses) {
+            String instructorName = course.getCourseInstructor().getInstructorName();
+            System.out.printf(" %-15s | %-15d | %-15s \n",
+                    course.getCourseName(),
+                    course.getCourseNumber(),
+                    instructorName
+            );
+        }
+        return courses;
+    }
 }
