@@ -70,4 +70,9 @@ public class Instructor {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public List<Course> getTaughtCourses() {
+        return taughtCourses;
+    }
+
 }
