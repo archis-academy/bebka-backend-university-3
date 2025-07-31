@@ -1,28 +1,38 @@
 package com.archisacademy.dao.impl;
 
-
 import com.archisacademy.dao.StudentDao;
 import com.archisacademy.model.Student;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import jakarta.persistence.criteria.CriteriaQuery;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentDaoImpl implements StudentDao {
 
+
     @Override
-    public Student createStudent(Student student) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            session.save(student);
-            transaction.commit();
-            System.out.println("DAO: Öğrenci veritabanına kaydedildi.");
+    public List<Student> getAllStudents() {
+        Session session = null;
+        List<Student> studentList = new ArrayList<>();
+
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+
+            CriteriaQuery<Student> criteriaQuery = session.getCriteriaBuilder().createQuery(Student.class);
+            criteriaQuery.from(Student.class);
+
+            studentList = session.createQuery(criteriaQuery).getResultList();
+
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
+            System.err.println("Tüm öğrencileri getirirken bir hata meydana geldi: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
-        return student;
+
+        return studentList;
     }
 }
