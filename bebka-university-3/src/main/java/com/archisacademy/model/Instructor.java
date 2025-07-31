@@ -71,9 +71,6 @@ public class Instructor {
         this.password = password;
     }
 
-    public void setTaughtCourses(List<Course> taughtCourses) {
-        this.taughtCourses = taughtCourses;
-    }
     public List<Course> getTaughtCourses() {
         return taughtCourses;
     }
