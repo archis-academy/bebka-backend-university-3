@@ -11,4 +11,5 @@ public interface InstructorDao {
     Instructor createInstructor(Instructor instructor);
     void deleteInstructor(long instructorNumber);
     void updateInstructor(long instructorNumber, String newInstructorName, String newEmail);
+    List<Instructor> getAllInstructors();
 }

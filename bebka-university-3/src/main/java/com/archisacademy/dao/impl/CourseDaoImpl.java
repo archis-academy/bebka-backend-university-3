@@ -70,7 +70,7 @@ public class CourseDaoImpl implements CourseDao {
     public void deleteCourseById(long courseId) {
         Session session = null;
         Transaction transaction = null;
-        
+
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
@@ -92,6 +92,24 @@ public class CourseDaoImpl implements CourseDao {
         } finally {
             if (session != null) session.close();
         }
+    }
+
+    @Override
+    public List<Course> getAllCourses() {
+        Transaction tx = null;
+        List<Course> courses = new ArrayList<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            courses = session.createQuery("SELECT c from Course c JOIN FETCH c.courseInstructor", Course.class)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+        return courses;
     }
 
     @Override

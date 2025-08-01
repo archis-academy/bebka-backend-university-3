@@ -32,6 +32,22 @@ public class CourseService {
         courseDao.deleteCourseById(courseId);
     }
 
+
+    public List<Course> getAllCourses(){
+        List<Course> courses = courseDao.getAllCourses();
+        System.out.printf(" %-15s | %-15s | %-15s \n",
+                "Kurs Adı", "Kurs No", "Eğitmen Adı");
+        System.out.println("-----------------------------------------------------");
+        for (Course course : courses) {
+            String instructorName = course.getCourseInstructor().getInstructorName();
+            System.out.printf(" %-15s | %-15d | %-15s \n",
+                    course.getCourseName(),
+                    course.getCourseNumber(),
+                    instructorName
+            );
+        }
+        return courses;
+    }
     public List<Course> getPopularCourses(int topCount){
         List<Course> popularCourses = courseDao.getPopularCourses(topCount);
         System.out.println("\n--------- | Kayıtlı Öğrenci Sayısına Göre En Popüler Kurslar | ---------");
