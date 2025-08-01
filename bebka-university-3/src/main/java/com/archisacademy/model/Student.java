@@ -65,5 +65,18 @@ public class Student {
         return enrolledCourses;
     }
 
+    public void setEnrolledCourses(List<Course> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
+    }
+
+    public void addCourse(Course course) {
+        if (this.enrolledCourses == null) {
+            this.enrolledCourses = new ArrayList<>();
+        }
+        if (!this.enrolledCourses.contains(course)) {
+            this.enrolledCourses.add(course);
+        }
+    }
+
 
 }

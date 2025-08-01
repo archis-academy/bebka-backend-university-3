@@ -32,6 +32,21 @@ public class StudentService {
         studentDao.updateStudent(studentNumber, newFullName, newEmail);
     }
 
+    public Student getStudentById(long id)
+    {
+        return studentDao.getStudentById(id);
+    }
+
+    public int getTotalCourseHour(long studentId)
+    {
+        return  studentDao.getTotalCourseHour(studentId);
+    }
+
+    public void assignCourseToStudent(long studentId,long courseId){
+        studentDao.assignCourseToStudent(studentId,courseId);
+    }
+
+
 }
 
 

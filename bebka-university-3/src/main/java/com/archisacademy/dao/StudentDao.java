@@ -9,4 +9,8 @@ public interface StudentDao {
     Student createStudent(Student student);
 
     void updateStudent(long studentNumber, String newFullName, String newEmail);
+    Student getStudentById(long id);
+    int getTotalCourseHour(long studentId);
+    void assignCourseToStudent(long studentId, long courseId);
+
 }
