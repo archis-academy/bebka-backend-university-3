@@ -1,6 +1,9 @@
 package com.archisacademy.dao;
 
 import com.archisacademy.model.Course;
+import com.archisacademy.model.Student;
+
+import java.util.List;
 
 import java.util.List;
 
@@ -9,4 +12,5 @@ public interface CourseDao {
     void updateCourse(Course course);
     void deleteCourseById(long id);
     List<Course> getAllCourses();
+    List<Course> getPopularCourses(int topCount);
 }

@@ -2,6 +2,7 @@ package com.archisacademy.dao.impl;
 
 import com.archisacademy.dao.CourseDao;
 import com.archisacademy.model.Course;
+import com.archisacademy.model.Student;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -16,6 +17,16 @@ public class CourseDaoImpl implements CourseDao {
         Transaction transaction = null;
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+
+            List<Student> enrolledStudents  = new ArrayList<>();
+            for (Student student : course.getEnrolledStudents()) {
+                Student dbStudent = session.get(Student.class, student.getId());
+                if (dbStudent != null) {
+                    enrolledStudents.add(dbStudent);
+                }
+            }
+            course.setEnrolledStudents(enrolledStudents);
+
             session.save(course);
             transaction.commit();
             System.out.println("Course added successfully.");
@@ -96,6 +107,27 @@ public class CourseDaoImpl implements CourseDao {
             if (tx != null) {
                 tx.rollback();
             }
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
+    @Override
+    public List<Course> getPopularCourses(int topCount) {
+        Transaction tx = null;
+        List<Course> courses = new ArrayList<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            courses = session.createQuery(
+                            "SELECT c FROM Course c " +
+                                    "LEFT JOIN c.enrolledStudents s " +
+                                    "GROUP BY c " +
+                                    "ORDER BY COUNT(s) DESC", Course.class)
+                    .setMaxResults(topCount)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
             e.printStackTrace();
         }
         return courses;
