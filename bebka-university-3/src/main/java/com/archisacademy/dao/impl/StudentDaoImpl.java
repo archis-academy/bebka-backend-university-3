@@ -182,5 +182,46 @@ public class StudentDaoImpl implements StudentDao {
             e.printStackTrace();
         }
     }
+
+    public Student getStudentById(long id) {
+        Student student = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            student = session.get(Student.class, id);
+
+            if (student != null) {
+                System.out.println("Öğrenci bulundu: " + student.getName());
+            } else {
+                System.out.println("ID ile öğrenci bulunamadı.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return student;
+    }
+
+    public int getTotalCourseHour(long studentId) {
+        int totalCourseHour = 0;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Student student = session.get(Student.class, studentId);
+
+            if (student != null) {
+                List<Course> courses = student.getEnrolledCourses();
+                for (Course course : courses) {
+                    totalCourseHour += course.getCourseHour();
+                }
+            } else {
+                System.out.println("Öğrenci bulunamadı. ID: " + studentId);
+            }
+        } catch (Exception e) {
+            System.out.println("Hata oluştu: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return totalCourseHour;
+    }
 }
 
