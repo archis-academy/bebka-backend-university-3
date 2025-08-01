@@ -17,6 +17,16 @@ public class CourseDaoImpl implements CourseDao {
         Transaction transaction = null;
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+
+            List<Student> enrolledStudents  = new ArrayList<>();
+            for (Student student : course.getEnrolledStudents()) {
+                Student dbStudent = session.get(Student.class, student.getId());
+                if (dbStudent != null) {
+                    enrolledStudents.add(dbStudent);
+                }
+            }
+            course.setEnrolledStudents(enrolledStudents);
+
             session.save(course);
             transaction.commit();
             System.out.println("Course added successfully.");
@@ -81,27 +91,6 @@ public class CourseDaoImpl implements CourseDao {
             e.printStackTrace();
         } finally {
             if (session != null) session.close();
-        }
-    }
-
-    @Override
-    public void addStudentToCourse(Course course, Student student) {
-        Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
-
-            //güncel hallerini db'den alıyoruz
-            course = session.get(Course.class, course.getId());
-            student = session.get(Student.class, student.getId());
-
-            //kursa öğrenci atıyoruz
-            course.getEnrolledStudents().add(student);
-            session.update(course);
-
-            tx.commit();
-            System.out.println("Öğrenci kursa başarıyla eklendi.");
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

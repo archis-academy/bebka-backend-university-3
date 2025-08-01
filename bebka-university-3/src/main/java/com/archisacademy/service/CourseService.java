@@ -14,9 +14,10 @@ public class CourseService {
         this.courseDao = courseDao;
     }
 
-    public Course addCourse(String courseName, long courseNumber, Instructor instructor) {
+    public Course addCourse(String courseName, long courseNumber, Instructor instructor, List<Student> enrolledStudents) {
         Course course = new Course(courseName, courseNumber);
         course.setCourseInstructor(instructor);
+        course.setEnrolledStudents(enrolledStudents);
         return courseDao.addCourse(course);
     }
 
@@ -31,15 +32,12 @@ public class CourseService {
         courseDao.deleteCourseById(courseId);
     }
 
-    public void addStudentToCourse(Course course, Student student) {
-        courseDao.addStudentToCourse(course, student);
-    }
-
     public List<Course> getPopularCourses(int topCount){
         List<Course> popularCourses = courseDao.getPopularCourses(topCount);
+        System.out.println("\n--------- | Kayıtlı Öğrenci Sayısına Göre En Popüler Kurslar | ---------");
         System.out.printf(" %-15s | %-15s | %-15s | %-10s\n",
                 "Kurs Adı", "Kurs No", "Eğitmen Adı", "Kayıtlı Öğrenci Sayısı");
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------");
         for (Course course : popularCourses) {
             String instructorName = course.getCourseInstructor().getInstructorName();
             int studentCount = course.getEnrolledStudents().size();

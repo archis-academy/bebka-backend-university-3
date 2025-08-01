@@ -9,6 +9,5 @@ public interface CourseDao {
     Course addCourse(Course course);
     void updateCourse(Course course);
     void deleteCourseById(long id);
-    void addStudentToCourse(Course course, Student student);
     List<Course> getPopularCourses(int topCount);
 }
