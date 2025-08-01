@@ -123,5 +123,18 @@ public class InstructorDaoImpl implements InstructorDao {
         return instructors;
     }
 
+    @Override
+    public Instructor findByInstructorNumber(long instructorNumber) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "FROM Instructor i WHERE i.instructorNumber= :number", Instructor.class)
+                    .setParameter("number", instructorNumber)
+                    .uniqueResult();
+
+        } catch (Exception e) {
+            System.out.println("Eğitmen aranırken Hata");
+            return null;
+        }
+    }
 }
 
