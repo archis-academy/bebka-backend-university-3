@@ -132,4 +132,60 @@ public class CourseDaoImpl implements CourseDao {
         }
         return courses;
     }
-}
+
+    @Override
+    public Course getCourseById(Long id) {
+        Transaction transaction = null;
+        Course course = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            course = session.get(Course.class, id);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
+        return course;
+    }
+
+    @Override
+    public Course getCourseByNumber(Long courseNumber) {
+        Transaction transaction = null;
+        Course course = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+             return session.createQuery("FROM Course c WHERE c.courseNumber = :courseNumber", Course.class)
+            .setParameter("courseNumber", courseNumber)
+                     .uniqueResult();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
+
+        return course;
+    }
+
+    @Override
+    public List<Course> getCoursesByStudentId(long id) {
+        List <Course> enrolledCourses=null;
+        Transaction transaction=null;
+        try(Session session=HibernateUtil.getSessionFactory().openSession()){
+            transaction= session.beginTransaction();
+            Student student = session.get(Student.class, id);
+            if (student != null) {
+                enrolledCourses = student.getEnrolledCourses();
+            } else {
+                System.out.println("DAO: Öğrenci bulunamadı!!!");
+            }
+            transaction.commit();
+        } catch (Exception e){
+            if (transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return enrolledCourses;
+    }
+    }
+
