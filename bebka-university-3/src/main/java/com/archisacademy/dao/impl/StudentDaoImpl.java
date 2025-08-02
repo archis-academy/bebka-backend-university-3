@@ -7,6 +7,7 @@ import com.archisacademy.model.Student;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -63,5 +64,31 @@ public class StudentDaoImpl implements StudentDao {
         }
     }
 
+    @Override
+    public List<Student> getAllStudents() {
+        Session session = null;
+        List<Student> students = null;
+        Transaction transaction = null;
 
-}
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+
+            Query<Student> query = session.createQuery("from Student", Student.class);
+            students = query.list();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return students;
+    }
+    }
+
