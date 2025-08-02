@@ -13,4 +13,7 @@ public interface CourseDao {
     void deleteCourseById(long id);
     List<Course> getAllCourses();
     List<Course> getPopularCourses(int topCount);
+    Course getCourseById(Long id);
+    Course getCourseByNumber(Long courseNumber);
+    List<Course> getCoursesByStudentId(long id);
 }
