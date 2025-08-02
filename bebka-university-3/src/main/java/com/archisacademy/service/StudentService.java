@@ -31,6 +31,9 @@ public class StudentService {
     public void updateStudent(long studentNumber, String newFullName, String newEmail, List<Course> newEnrolledCourses) {
         studentDao.updateStudent(studentNumber, newFullName, newEmail);
     }
+    public List<Student> getAllStudents() {
+        return studentDao.getAllStudents();
+    }
 
 }
 
