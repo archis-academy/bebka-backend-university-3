@@ -66,5 +66,26 @@ public class CourseService {
         }
         return popularCourses;
     }
+    public Course getCourseById(Long id){
+        if (id==null || id<=0){
+            throw new IllegalArgumentException("GEÇERSİZ KURS ID!!");
+        }
+        return courseDao.getCourseById(id);
+    }
+    public Course getCourseByNumber(Long courseNumber){
+        if (courseNumber==null || courseNumber<=0){
+            throw new IllegalArgumentException("GEÇERSİZ KURS NUMARASI!!");
+        }
+        return courseDao.getCourseByNumber(courseNumber);
+    }
+    public List <Course> getCoursesByStudentId(long id){
+        List <Course> enrolledCourses=courseDao.getCoursesByStudentId(id);
+        if (enrolledCourses != null && !enrolledCourses.isEmpty()){
+            System.out.println("Öğrenciye ait kurslar:");
+        }else {
+            System.out.println("Öğrenciye ait kurs bulunamadı!!");
+        }
+        return enrolledCourses;
+    }
 
 }
