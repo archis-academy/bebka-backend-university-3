@@ -13,4 +13,5 @@ public interface InstructorDao {
     void updateInstructor(long instructorNumber, String newInstructorName, String newEmail);
     List<Instructor> getAllInstructors();
     Instructor findByInstructorNumber(long instructorNumber);
+    List<Course> getTopRecommendedCourses(long instructorId, int topCount);
 }
