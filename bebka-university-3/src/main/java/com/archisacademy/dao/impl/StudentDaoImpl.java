@@ -104,33 +104,14 @@ public class StudentDaoImpl implements StudentDao {
         return totalCourseHour;
     }
 
-    public void assignCourseToStudent(long studentId, long courseId) {
-        Transaction transaction = null;
 
+    public List<Long> getCoursesByStudentId(long studentId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            Student student = session.get(Student.class, studentId);
-            Course course = session.get(Course.class, courseId);
-
-            if (student != null && course != null) {
-                student.addCourse(course);
-                course.addStudent(student);
-
-                session.update(student);
-                session.update(course);
-
-                transaction.commit();
-                System.out.println("Kurs öğrenciye başarıyla atandı.");
-            } else {
-                System.out.println("Student veya Course bulunamadı.");
-            }
-
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
+            String sql = "SELECT course_id FROM course_student WHERE student_id = :studentId";
+            List<Long> courseIds = session.createNativeQuery(sql)
+                    .setParameter("studentId", studentId)
+                    .list();
+            return courseIds;
         }
     }
-
-
 }

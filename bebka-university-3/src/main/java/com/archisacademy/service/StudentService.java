@@ -41,11 +41,15 @@ public class StudentService {
     {
         return  studentDao.getTotalCourseHour(studentId);
     }
+//
+//    public void assignCourseToStudent(long studentId,long courseId){
+//        studentDao.assignCourseToStudent(studentId,courseId);
+//    }
 
-    public void assignCourseToStudent(long studentId,long courseId){
-        studentDao.assignCourseToStudent(studentId,courseId);
+    public List<Long>getCoursesByStudentId(long studentId)
+    {
+      return studentDao.getCoursesByStudentId(studentId);
     }
-
 
 }
 

@@ -11,6 +11,7 @@ public interface StudentDao {
     void updateStudent(long studentNumber, String newFullName, String newEmail);
     Student getStudentById(long id);
     int getTotalCourseHour(long studentId);
-    void assignCourseToStudent(long studentId, long courseId);
+    List<Long> getCoursesByStudentId(long studentId);
+
 
 }
