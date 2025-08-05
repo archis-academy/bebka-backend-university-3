@@ -97,12 +97,6 @@ public class CourseService {
 
         List<Course> courseslist = courseDao.searchCoursesByName(courses, filters);
 
-        System.out.println("Bulunan kurs sayısı: " + courseslist.size());
-        for (Course course : courseslist) {
-            System.out.println("Kurs Adı: " + course.getCourseName()
-                    + ", Eğitmen ID: " + (course.getCourseInstructor() != null ? course.getCourseInstructor().getId() : "Yok"));
-        }
-
         return courseslist;
     }
 

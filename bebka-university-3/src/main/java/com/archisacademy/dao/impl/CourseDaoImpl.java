@@ -193,14 +193,11 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     public List<Course> searchCoursesByName(String searchCriteria, Map<String, String> filters) {
+
         List<Course> result = new ArrayList<>();
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            StringBuilder hql = new StringBuilder("FROM Course c WHERE 1=1");
-
-            if (searchCriteria != null && !searchCriteria.isEmpty()) {
-                hql.append(" AND LOWER(c.courseName) LIKE :searchText");
-            }
+            StringBuilder hql = new StringBuilder("FROM Course c JOIN FETCH c.courseInstructor WHERE LOWER(c.courseName) LIKE :searchCriteria");
 
             if (filters != null) {
                 if (filters.get("instructorId") != null) {
@@ -209,24 +206,19 @@ public class CourseDaoImpl implements CourseDao {
             }
 
             Query<Course> query = session.createQuery(hql.toString(), Course.class);
+            query.setParameter("searchCriteria", "%" + searchCriteria.toLowerCase() + "%");
 
-            if (searchCriteria != null && !searchCriteria.isEmpty()) {
-                query.setParameter("searchText", "%" + searchCriteria.toLowerCase() + "%");
+            if (filters != null && filters.get("instructorId") != null) {
+                long instructorId = Long.parseLong(filters.get("instructorId"));
+                query.setParameter("instructorId", instructorId);
             }
-
-//            if (filters != null) {
-//                String instructorId = filters.get("instructorId");
-//                if (instructorId != null) {
-//                    query.setParameter("instructorId", Long.parseLong(instructorId));
-//                }
-//            }
 
             result = query.getResultList();
 
-            for (Course c : result) {
-                System.out.println("Kurs Adı: " + c.getCourseName()
-                        + ", Kurs No: " + c.getCourseNumber()
-                        + ", Eğitmen ID: " + (c.getCourseInstructor() != null ? c.getCourseInstructor().getId() : "Yok"));
+            for (Course course : result) {
+                System.out.println("Kurs Adı: " + course.getCourseName()
+                        + " | Kurs Numarası: " + course.getCourseNumber()
+                        + " | Eğitmen: " + course.getCourseInstructor().getInstructorName());
             }
 
         } catch (Exception e) {
