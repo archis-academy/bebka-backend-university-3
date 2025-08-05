@@ -2,11 +2,9 @@ package com.archisacademy.dao;
 
 import com.archisacademy.model.Course;
 import com.archisacademy.model.Student;
-
-import java.util.List;
-
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface CourseDao {
     Course addCourse(Course course);
@@ -18,4 +16,6 @@ public interface CourseDao {
     Course getCourseByNumber(Long courseNumber);
     List<Course> getCoursesByStudentId(long id);
     List<Course> searchCoursesByName(String courseName, Map<String, String> filters);
+
+    Optional<Course> findByIdWithStudents(long courseId);
 }

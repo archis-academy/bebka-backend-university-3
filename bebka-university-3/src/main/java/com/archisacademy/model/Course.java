@@ -11,22 +11,25 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column(name = "course_name", nullable = false)
     private String courseName;
+
     @Column(name = "course_number", unique = true, nullable = false)
     private long courseNumber;
 
-    //SINIFLAR ARASI İLİŞKİLER
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private Instructor courseInstructor;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "course_student", // Ara tablo
-            joinColumns = @JoinColumn(name = "course_id"), // Bu tablonun id'si
-            inverseJoinColumns = @JoinColumn(name = "student_id") // Diğer tablonun id'si
+            name = "course_student",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Student> enrolledStudents;
+
     public Course() {}
 
     public Course(String courseName, long courseNumber) {
@@ -74,5 +77,4 @@ public class Course {
     public void setEnrolledStudents(List<Student> enrolledStudents) {
         this.enrolledStudents = enrolledStudents;
     }
-
 }

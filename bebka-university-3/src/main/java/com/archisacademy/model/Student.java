@@ -17,6 +17,12 @@ public class Student {
     private String email;
     private String password;
 
+    @Column(name="is_successful")
+    private boolean successful;
+
+    @Column(name="feedback", columnDefinition = "TEXT") //
+    private String feedback;
+
     @ManyToMany(mappedBy = "enrolledStudents")
     private List<Course> enrolledCourses;
 
@@ -72,6 +78,23 @@ public class Student {
     public List<Course> getEnrolledCourses() {
         return enrolledCourses;
     }
+    public boolean isSuccessful() {
+        return successful;
+    }
 
+    public void setSuccessful(boolean successful) {
+        this.successful = successful;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
 
 }
+
+
+

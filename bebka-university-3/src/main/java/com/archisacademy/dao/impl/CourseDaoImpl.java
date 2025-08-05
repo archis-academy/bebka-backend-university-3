@@ -12,6 +12,7 @@ import org.hibernate.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 public class CourseDaoImpl implements CourseDao {
@@ -159,9 +160,9 @@ public class CourseDaoImpl implements CourseDao {
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-             return session.createQuery("FROM Course c WHERE c.courseNumber = :courseNumber", Course.class)
-            .setParameter("courseNumber", courseNumber)
-                     .uniqueResult();
+            return session.createQuery("FROM Course c WHERE c.courseNumber = :courseNumber", Course.class)
+                    .setParameter("courseNumber", courseNumber)
+                    .uniqueResult();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
@@ -192,6 +193,7 @@ public class CourseDaoImpl implements CourseDao {
         return enrolledCourses;
     }
 
+    @Override
     public List<Course> searchCoursesByName(String searchCriteria, Map<String, String> filters) {
 
         List<Course> result = new ArrayList<>();
@@ -227,5 +229,19 @@ public class CourseDaoImpl implements CourseDao {
 
         return result;
     }
-}
 
+        @Override
+    public Optional<Course> findByIdWithStudents(long courseId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Course course = session.createQuery(
+                            "FROM Course c LEFT JOIN FETCH c.enrolledStudents WHERE c.id = :courseId", Course.class)
+                    .setParameter("courseId", courseId)
+                    .uniqueResult();
+            return Optional.ofNullable(course);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+}
