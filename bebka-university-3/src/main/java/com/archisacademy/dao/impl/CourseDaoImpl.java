@@ -6,9 +6,13 @@ import com.archisacademy.model.Student;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 
 public class CourseDaoImpl implements CourseDao {
 
@@ -187,5 +191,49 @@ public class CourseDaoImpl implements CourseDao {
         }
         return enrolledCourses;
     }
+
+    public List<Course> searchCoursesByName(String searchCriteria, Map<String, String> filters) {
+        List<Course> result = new ArrayList<>();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            StringBuilder hql = new StringBuilder("FROM Course c WHERE 1=1");
+
+            if (searchCriteria != null && !searchCriteria.isEmpty()) {
+                hql.append(" AND LOWER(c.courseName) LIKE :searchText");
+            }
+
+            if (filters != null) {
+                if (filters.get("instructorId") != null) {
+                    hql.append(" AND c.courseInstructor.id = :instructorId");
+                }
+            }
+
+            Query<Course> query = session.createQuery(hql.toString(), Course.class);
+
+            if (searchCriteria != null && !searchCriteria.isEmpty()) {
+                query.setParameter("searchText", "%" + searchCriteria.toLowerCase() + "%");
+            }
+
+//            if (filters != null) {
+//                String instructorId = filters.get("instructorId");
+//                if (instructorId != null) {
+//                    query.setParameter("instructorId", Long.parseLong(instructorId));
+//                }
+//            }
+
+            result = query.getResultList();
+
+            for (Course c : result) {
+                System.out.println("Kurs Adı: " + c.getCourseName()
+                        + ", Kurs No: " + c.getCourseNumber()
+                        + ", Eğitmen ID: " + (c.getCourseInstructor() != null ? c.getCourseInstructor().getId() : "Yok"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
+}
 
