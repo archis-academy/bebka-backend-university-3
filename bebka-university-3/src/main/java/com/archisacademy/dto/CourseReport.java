@@ -2,7 +2,6 @@ package com.archisacademy.dto;
 
 import java.util.List;
 
-// Bu sınıf, raporun sonuçlarını taşımak için kullanılır.
 public class CourseReport {
 
     private long courseId;
@@ -17,7 +16,6 @@ public class CourseReport {
         this.courseName = courseName;
     }
 
-    // Raporun çıktısını daha güzel görmek için toString metodu
     @Override
     public String toString() {
         return "--- Kurs Raporu ---\n" +
@@ -29,7 +27,6 @@ public class CourseReport {
                 "--------------------";
     }
 
-    // --- Getter ve Setter Metotları ---
     public long getCourseId() { return courseId; }
     public void setCourseId(long courseId) { this.courseId = courseId; }
     public String getCourseName() { return courseName; }
