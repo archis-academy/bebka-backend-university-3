@@ -1,7 +1,9 @@
 package com.archisacademy.dao.impl;
 
+import com.archisacademy.dao.CourseStudentDao;
 import com.archisacademy.dao.InstructorDao;
 import com.archisacademy.model.Course;
+import com.archisacademy.model.CourseStudent;
 import com.archisacademy.model.Instructor;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
@@ -135,6 +137,26 @@ public class InstructorDaoImpl implements InstructorDao {
             System.out.println("Eğitmen aranırken Hata");
             return null;
         }
+    }
+
+    @Override
+    public double getAverageGradeByInstructorNumber(long instructorNumber) {
+        CourseStudentDao courseStudentDao = new CourseStudentDaoImpl();
+        List<CourseStudent> records = courseStudentDao.getByInstructorNumber(instructorNumber);
+
+        if (records == null || records.isEmpty()) return 0.0;
+
+        double total = 0;
+        int count = 0;
+
+        for (CourseStudent cs : records) {
+            if (cs.getGrade() != null) {
+                total += cs.getGrade();
+                count++;
+            }
+        }
+
+        return count > 0 ? total / count : 0.0;
     }
 }
 

@@ -45,4 +45,8 @@ public class InstructorService {
                 instructor.getEmail(),
                 instructor.getInstructorNumber());
     }
+
+    public double getAverageGradeByInstructorNumber(long instructorId){
+        return instructorDao.getAverageGradeByInstructorNumber(instructorId);
+    }
 }

@@ -27,12 +27,17 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "student_id") // Diğer tablonun id'si
     )
     private List<Student> enrolledStudents;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseStudent> courseStudents;
+
     public Course() {}
 
     public Course(String courseName, long courseNumber) {
         this.courseName = courseName;
         this.courseNumber = courseNumber;
         this.enrolledStudents = new ArrayList<>();
+        this.courseStudents = new ArrayList<>();
     }
 
     public long getId() {
@@ -75,4 +80,11 @@ public class Course {
         this.enrolledStudents = enrolledStudents;
     }
 
+    public List<CourseStudent> getCourseStudents() {
+        return courseStudents;
+    }
+
+    public void setCourseStudents(List<CourseStudent> courseStudents) {
+        this.courseStudents = courseStudents;
+    }
 }

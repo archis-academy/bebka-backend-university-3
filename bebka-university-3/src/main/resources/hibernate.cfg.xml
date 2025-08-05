@@ -8,9 +8,9 @@
 
         <!-- Veritabanı bağlantısı -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/jdbc</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/uni</property>
         <property name="hibernate.connection.username">postgres</property>
-        <property name="hibernate.connection.password">postgres</property>
+        <property name="hibernate.connection.password">Busra12345</property>
 
         <!-- Hibernate ayarları -->
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
@@ -21,6 +21,7 @@
         <mapping class="com.archisacademy.model.Student"/>
         <mapping class="com.archisacademy.model.Course"/>
         <mapping class="com.archisacademy.model.Instructor"/>
+        <mapping class="com.archisacademy.model.CourseStudent"/>
 
     </session-factory>
 </hibernate-configuration>
