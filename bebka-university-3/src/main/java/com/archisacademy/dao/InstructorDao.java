@@ -13,5 +13,5 @@ public interface InstructorDao {
     void updateInstructor(long instructorNumber, String newInstructorName, String newEmail);
     List<Instructor> getAllInstructors();
     Instructor findByInstructorNumber(long instructorNumber);
-    double getAverageGradeByInstructorNumber(long instructorNumber);
+    double getAverageGradeByInstructorId(long instructorId);
 }

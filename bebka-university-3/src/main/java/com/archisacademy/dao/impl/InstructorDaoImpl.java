@@ -140,23 +140,29 @@ public class InstructorDaoImpl implements InstructorDao {
     }
 
     @Override
-    public double getAverageGradeByInstructorNumber(long instructorNumber) {
-        CourseStudentDao courseStudentDao = new CourseStudentDaoImpl();
-        List<CourseStudent> records = courseStudentDao.getByInstructorNumber(instructorNumber);
-
-        if (records == null || records.isEmpty()) return 0.0;
+    public double getAverageGradeByInstructorId(long instructorId) {
 
         double total = 0;
         int count = 0;
 
-        for (CourseStudent cs : records) {
-            if (cs.getGrade() != null) {
-                total += cs.getGrade();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // Instructor’a ait tüm not kayıtlarını getiriyoruz
+            String hql = "SELECT cs.grade " +
+                    "FROM CourseStudent cs " +
+                    "JOIN cs.course c " +
+                    "WHERE c.courseInstructor.id = :instructorId AND cs.grade IS NOT NULL";
+
+            List<Double> grades = session.createQuery(hql, Double.class)
+                    .setParameter("instructorId", instructorId)
+                    .getResultList();
+
+            for (Double grade : grades) {
+                total += grade;
                 count++;
             }
-        }
 
-        return count > 0 ? total / count : 0.0;
+            return count > 0 ? total / count : 0.0;
+        }
     }
 }
 
