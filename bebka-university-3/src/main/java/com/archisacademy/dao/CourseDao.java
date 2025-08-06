@@ -6,6 +6,7 @@ import com.archisacademy.model.Student;
 import java.util.List;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CourseDao {
     Course addCourse(Course course);
@@ -16,4 +17,5 @@ public interface CourseDao {
     Course getCourseById(Long id);
     Course getCourseByNumber(Long courseNumber);
     List<Course> getCoursesByStudentId(long id);
+    List<Course> searchCoursesByName(String courseName, Map<String, String> filters);
 }

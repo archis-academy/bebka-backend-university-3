@@ -65,6 +65,28 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
+    public Student getStudentByNumber(long studentNumber) {
+        Transaction transaction = null;
+        Student student = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            student = session.createQuery(
+                    "FROM Student WHERE studentNumber = :studentNumber", Student.class)
+                    .setParameter("studentNumber", studentNumber)
+                    .uniqueResult();
+            transaction.commit();
+
+        }catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.err.println("Öğrenci sorgulama hatası " +e.getMessage());
+        }
+        return student;
+    }
+
+    @Override
     public List<Student> getAllStudents() {
         Session session = null;
         List<Student> students = null;
@@ -91,26 +113,5 @@ public class StudentDaoImpl implements StudentDao {
         return students;
     }
 
-    @Override
-    public Student getStudentByNumber(long studentNumber) {
-        Transaction transaction = null;
-        Student student = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            student = session.createQuery(
-                            "FROM Student WHERE studentNumber = :studentNumber", Student.class)
-                    .setParameter("studentNumber", studentNumber)
-                    .uniqueResult();
-            transaction.commit();
-
-        }catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            System.err.println("Öğrenci sorgulama hatası " +e.getMessage());
-        }
-        return student;
-    }
 }
 

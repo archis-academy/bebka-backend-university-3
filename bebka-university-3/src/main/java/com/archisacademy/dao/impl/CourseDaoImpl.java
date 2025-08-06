@@ -6,9 +6,13 @@ import com.archisacademy.model.Student;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 
 public class CourseDaoImpl implements CourseDao {
 
@@ -187,5 +191,41 @@ public class CourseDaoImpl implements CourseDao {
         }
         return enrolledCourses;
     }
+
+    public List<Course> searchCoursesByName(String searchCriteria, Map<String, String> filters) {
+
+        List<Course> result = new ArrayList<>();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            StringBuilder hql = new StringBuilder("FROM Course c JOIN FETCH c.courseInstructor WHERE LOWER(c.courseName) LIKE :searchCriteria");
+
+            if (filters != null) {
+                if (filters.get("instructorId") != null) {
+                    hql.append(" AND c.courseInstructor.id = :instructorId");
+                }
+            }
+
+            Query<Course> query = session.createQuery(hql.toString(), Course.class);
+            query.setParameter("searchCriteria", "%" + searchCriteria.toLowerCase() + "%");
+
+            if (filters != null && filters.get("instructorId") != null) {
+                long instructorId = Long.parseLong(filters.get("instructorId"));
+                query.setParameter("instructorId", instructorId);
+            }
+
+            result = query.getResultList();
+
+            for (Course course : result) {
+                System.out.println("Kurs Adı: " + course.getCourseName()
+                        + " | Kurs Numarası: " + course.getCourseNumber()
+                        + " | Eğitmen: " + course.getCourseInstructor().getInstructorName());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
+}
 
