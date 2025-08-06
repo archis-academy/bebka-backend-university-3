@@ -140,14 +140,14 @@ public class InstructorDaoImpl implements InstructorDao {
     }
 
     @Override
-    public List<Course> getTopRecommendedCourses(long instructorId, int topCount) {
+    public void getTopRecommendedCourses(long instructorId, int topCount) {
         Transaction transaction = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
             Query<Course> query = session.createQuery(
-                    "SELECT c FROM Course c JOIN c.enrolledStudents s WHERE c.courseInstructor.id = :instructorId GROUP BY c.id ORDER BY COUNT(s.id) DESC", Course.class
+                    "SELECT c FROM Course c LEFT JOIN c.enrolledStudents s WHERE c.courseInstructor.id = :instructorId GROUP BY c.id ORDER BY COUNT(s.id) DESC", Course.class
             );
 
             query.setParameter("instructorId", instructorId);
@@ -155,15 +155,19 @@ public class InstructorDaoImpl implements InstructorDao {
 
             List<Course> recommendedCourses = query.getResultList();
 
+
+            System.out.println("--- En Çok Önerilen Kurslar Listeleniyor ---");
             if (recommendedCourses.isEmpty()) {
-                System.out.println(instructorId + " Bu eğitmenin hiç kursu bulunmamakta veya kurslarına öğrenci kayıtlı değil.");
+                System.out.println(instructorId + " ID'li eğitmenin hiç kursu bulunmamakta veya kurslarına öğrenci kayıtlı değil.");
             } else {
-                System.out.println(instructorId + " Bu eğitmenin en çok önerilen " + recommendedCourses.size() + " kursu listelenmiştir.");
+                System.out.println(instructorId + " ID'li eğitmen için en çok önerilen " + recommendedCourses.size() + " kurs:");
+                for (Course course : recommendedCourses) {
+                    System.out.println("- Kurs Adı: " + course.getCourseName() + ", Kayıtlı Öğrenci Sayısı: " + course.getEnrolledStudents().size());
+                }
             }
+            System.out.println("--- Liste Sonlandı ---");
 
             transaction.commit();
-
-            return recommendedCourses;
 
         } catch (Exception e) {
             if (transaction != null) {
@@ -171,7 +175,6 @@ public class InstructorDaoImpl implements InstructorDao {
             }
             System.err.println("En çok önerilen kurslar listelenirken bir hata oluştu: " + e.getMessage());
             e.printStackTrace();
-            return Collections.emptyList();
         }
     }
 }

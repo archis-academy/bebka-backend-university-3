@@ -47,7 +47,7 @@ public class InstructorService {
                 instructor.getInstructorNumber());
     }
 
-    public List<Course> getTopRecommendedCourses(long instructorId, int topCount) {
-        return instructorDao.getTopRecommendedCourses(instructorId, topCount);
+    public void getTopRecommendedCourses(long instructorId, int topCount) {
+        instructorDao.getTopRecommendedCourses(instructorId, topCount);
     }
 }
