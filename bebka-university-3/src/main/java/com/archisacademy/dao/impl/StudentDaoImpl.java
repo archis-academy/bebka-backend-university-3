@@ -72,7 +72,7 @@ public class StudentDaoImpl implements StudentDao {
             transaction = session.beginTransaction();
 
             student = session.createQuery(
-                    "FROM Student WHERE studentNumber = :studentNumber", Student.class)
+                            "FROM Student WHERE studentNumber = :studentNumber", Student.class)
                     .setParameter("studentNumber", studentNumber)
                     .uniqueResult();
             transaction.commit();
@@ -112,6 +112,4 @@ public class StudentDaoImpl implements StudentDao {
         }
         return students;
     }
-
 }
-
