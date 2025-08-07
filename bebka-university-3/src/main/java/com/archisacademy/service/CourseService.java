@@ -2,6 +2,7 @@ package com.archisacademy.service;
 
 import com.archisacademy.dao.CourseDao;
 import com.archisacademy.model.Course;
+import com.archisacademy.model.CourseReport;
 import com.archisacademy.model.Instructor;
 import com.archisacademy.model.Student;
 
@@ -102,23 +103,30 @@ public class CourseService {
 
         return courseslist;
     }
-
-    public List<String> getEnrolledStudentNamesByCourseId(long courseId) {
+    public CourseReport generateCourseReport(long courseId) {
 
         Course course = courseDao.findByIdWithStudents(courseId);
 
         if (course == null) {
-            System.out.println("UYARI: " + courseId + " ID'li kurs bulunamadı!");
-
-            return new ArrayList<>();
+            throw new RuntimeException("HATA: " + courseId + " ID'li kurs bulunamadı!");
         }
+
+        CourseReport report = new CourseReport();
+        report.setCourseId(course.getId());
+        report.setCourseName(course.getCourseName());
+
+        List<Student> students = course.getEnrolledStudents();
 
         List<String> studentNames = new ArrayList<>();
-
-        for (Student student : course.getEnrolledStudents()) {
-
-            studentNames.add(student.getName());
+        if (students != null) {
+            for (Student student : students) {
+                studentNames.add(student.getName());
+            }
         }
-        return studentNames;
+
+        report.setTotalStudents(studentNames.size());
+        report.setStudentNames(studentNames);
+
+        return report;
     }
 }
