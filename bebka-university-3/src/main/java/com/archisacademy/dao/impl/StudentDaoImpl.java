@@ -90,5 +90,32 @@ public class StudentDaoImpl implements StudentDao {
         }
         return students;
     }
+
+    @Override
+    public void deleteStudentByNumber(long studentNumber) {
+        Transaction transaction=null;
+        try(Session session=HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Student student = session.createQuery(
+                            "FROM Student WHERE studentNumber = :studentNumber", Student.class)
+                    .setParameter("studentNumber", studentNumber)
+                    .uniqueResult();
+
+            if (student != null) {
+                session.delete(student);
+                System.out.println("Öğrenci silindi.");
+            } else {
+                System.out.println("Öğrenci bulunamadı!");
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
+}
 

@@ -35,6 +35,8 @@ public class StudentService {
         return studentDao.getAllStudents();
     }
 
+    public void deleteStudentByNumber(long studentNumber) { studentDao.deleteStudentByNumber(studentNumber);}
+
 }
 
 
