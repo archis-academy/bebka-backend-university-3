@@ -65,6 +65,28 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
+    public Student getStudentByNumber(long studentNumber) {
+        Transaction transaction = null;
+        Student student = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            student = session.createQuery(
+                    "FROM Student WHERE studentNumber = :studentNumber", Student.class)
+                    .setParameter("studentNumber", studentNumber)
+                    .uniqueResult();
+            transaction.commit();
+
+        }catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.err.println("Öğrenci sorgulama hatası " +e.getMessage());
+        }
+        return student;
+    }
+
+    @Override
     public List<Student> getAllStudents() {
         Session session = null;
         List<Student> students = null;
@@ -92,9 +114,52 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
+    public void getRecommendedCoursesForStudent(long studentId) {
+        Transaction transaction = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Student student = session.get(Student.class, studentId);
+            if (student == null) {
+                System.out.println("Öğrenci bulunamadı. ID: " + studentId);
+                return;
+            }
+
+            Query<Course> query = session.createQuery(
+                    "SELECT c FROM Course c WHERE c.id NOT IN " +
+                            "(SELECT ec.id FROM Student s JOIN s.enrolledCourses ec WHERE s.id = :studentId)", Course.class);
+
+            query.setParameter("studentId", studentId);
+            List<Course> recommendedCourses = query.getResultList();
+
+            System.out.println("--- Öğrenci ID " + studentId + " için Önerilen Kurslar Listeleniyor ---");
+            if (recommendedCourses.isEmpty()) {
+                System.out.println("Önerilen kurs bulunamadı.");
+            } else {
+                System.out.println("Önerilen " + recommendedCourses.size() + " kurs:");
+                for (Course course : recommendedCourses) {
+                    System.out.println("- Kurs Adı: " + course.getCourseName());
+                }
+            }
+            System.out.println("--- Liste Sonlandı ---");
+
+            transaction.commit();
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.err.println("Önerilen kurslar getirilirken bir hata oluştu: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
     public void deleteStudentByNumber(long studentNumber) {
-        Transaction transaction=null;
-        try(Session session=HibernateUtil.getSessionFactory().openSession()) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
             Student student = session.createQuery(

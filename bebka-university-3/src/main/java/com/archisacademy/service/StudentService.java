@@ -35,6 +35,23 @@ public class StudentService {
         return studentDao.getAllStudents();
     }
 
+    public Student getStudentByNumber(long studentNumber) {
+        Student student = studentDao.getStudentByNumber(studentNumber);
+
+        if (student != null) {
+            System.out.println("Adı: " + student.getName());
+            System.out.println("Email: " + student.getEmail());
+        } else {
+            System.out.println("Öğrenci bulunamadı.");
+        }
+
+        return student;
+    }
+
+    public void printRecommendedCourses(long studentId) {
+        studentDao.getRecommendedCoursesForStudent(studentId);
+    }
+
     public void deleteStudentByNumber(long studentNumber) { studentDao.deleteStudentByNumber(studentNumber);}
 
 }

@@ -1,6 +1,7 @@
 package com.archisacademy.service;
 
 import com.archisacademy.dao.InstructorDao;
+import com.archisacademy.model.Course;
 import com.archisacademy.model.Instructor;
 
 import java.util.List;
@@ -44,5 +45,9 @@ public class InstructorService {
                 instructor.getInstructorName(),
                 instructor.getEmail(),
                 instructor.getInstructorNumber());
+    }
+
+    public void getTopRecommendedCourses(long instructorId, int topCount) {
+        instructorDao.getTopRecommendedCourses(instructorId, topCount);
     }
 }

@@ -5,7 +5,9 @@ import com.archisacademy.model.Course;
 import com.archisacademy.model.Instructor;
 import com.archisacademy.model.Student;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CourseService {
     private final CourseDao courseDao;
@@ -86,6 +88,16 @@ public class CourseService {
             System.out.println("Öğrenciye ait kurs bulunamadı!!");
         }
         return enrolledCourses;
+    }
+
+    public List<Course> searchCoursesByName(String courses,String instructorid)
+    {
+        Map<String, String> filters = new HashMap<>();
+        filters.put("instructorId", instructorid);
+
+        List<Course> courseslist = courseDao.searchCoursesByName(courses, filters);
+
+        return courseslist;
     }
 
 }
