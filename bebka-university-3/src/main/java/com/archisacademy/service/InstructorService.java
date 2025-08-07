@@ -1,6 +1,7 @@
 package com.archisacademy.service;
 
 import com.archisacademy.dao.InstructorDao;
+import com.archisacademy.model.Course;
 import com.archisacademy.model.Instructor;
 
 import java.util.List;
@@ -49,5 +50,9 @@ public class InstructorService {
 
     public double getAverageGradeByInstructorId(long instructorId){
         return instructorDao.getAverageGradeByInstructorId(instructorId);
+    }
+
+    public void getTopRecommendedCourses(long instructorId, int topCount) {
+        instructorDao.getTopRecommendedCourses(instructorId, topCount);
     }
 }

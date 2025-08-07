@@ -48,6 +48,9 @@ public class StudentService {
         return student;
     }
 
+    public void printRecommendedCourses(long studentId) {
+        studentDao.getRecommendedCoursesForStudent(studentId);
+    }
 
 }
 
