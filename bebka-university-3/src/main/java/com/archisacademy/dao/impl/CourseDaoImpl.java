@@ -12,6 +12,7 @@ import org.hibernate.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 public class CourseDaoImpl implements CourseDao {
@@ -190,6 +191,19 @@ public class CourseDaoImpl implements CourseDao {
             e.printStackTrace();
         }
         return enrolledCourses;
+    }
+    @Override
+    public Optional<Course> findByIdWithStudents(long courseId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Course course = session.createQuery(
+                            "FROM Course c LEFT JOIN FETCH c.enrolledStudents WHERE c.id = :courseId", Course.class)
+                    .setParameter("courseId", courseId)
+                    .uniqueResult();
+            return Optional.ofNullable(course);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     public List<Course> searchCoursesByName(String searchCriteria, Map<String, String> filters) {

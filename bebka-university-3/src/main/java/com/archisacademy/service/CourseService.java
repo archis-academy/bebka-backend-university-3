@@ -8,6 +8,9 @@ import com.archisacademy.model.Student;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.archisacademy.dto.CourseReport;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 public class CourseService {
     private final CourseDao courseDao;
@@ -80,7 +83,7 @@ public class CourseService {
         }
         return courseDao.getCourseByNumber(courseNumber);
     }
-    public List <Course> getCoursesByStudentId(long id){
+        public List <Course> getCoursesByStudentId(long id){
         List <Course> enrolledCourses=courseDao.getCoursesByStudentId(id);
         if (enrolledCourses != null && !enrolledCourses.isEmpty()){
             System.out.println("Öğrenciye ait kurslar:");
@@ -98,6 +101,45 @@ public class CourseService {
         List<Course> courseslist = courseDao.searchCoursesByName(courses, filters);
 
         return courseslist;
+    }
+    public CourseReport generateSpecialCourseReport(long courseId) {
+        Course course = courseDao.findByIdWithStudents(courseId)
+                .orElseThrow(() -> new RuntimeException("HATA: Rapor oluşturulacak kurs bulunamadı! ID: " + courseId));
+
+        List<Student> students = course.getEnrolledStudents();
+        if (students == null || students.isEmpty()) {
+            return createEmptyReportForCourse(course);
+        }
+
+        long successfulStudentCount = students.stream()
+                .filter(Student::isSuccessful)
+                .count();
+
+        List<String> feedbacks = students.stream()
+                .map(Student::getFeedback)
+                .filter(fb -> fb != null && !fb.trim().isEmpty())
+                .collect(Collectors.toList());
+
+        CourseReport report = new CourseReport();
+        report.setCourseId(course.getId());
+        report.setCourseName(course.getCourseName());
+        report.setTotalStudents(students.size());
+
+        double successRate = (double) successfulStudentCount / students.size() * 100.0;
+        report.setSuccessRate(successRate);
+
+        report.setStudentFeedbacks(feedbacks);
+
+        return report;
+    }
+    private CourseReport createEmptyReportForCourse(Course course) {
+        CourseReport report = new CourseReport();
+        report.setCourseId(course.getId());
+        report.setCourseName(course.getCourseName());
+        report.setTotalStudents(0);
+        report.setSuccessRate(0.0);
+        report.setStudentFeedbacks(Collections.emptyList());
+        return report;
     }
 
 }

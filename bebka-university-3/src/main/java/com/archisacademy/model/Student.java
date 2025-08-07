@@ -16,6 +16,8 @@ public class Student {
     private long studentNumber;
     private String email;
     private String password;
+    private boolean successful;
+    private String feedback;
 
     @ManyToMany(mappedBy = "enrolledStudents")
     private List<Course> enrolledCourses;
@@ -72,6 +74,24 @@ public class Student {
     public List<Course> getEnrolledCourses() {
         return enrolledCourses;
     }
+    public boolean isSuccessful() {
+        return successful;
+    }
 
+    public void setSuccessful(boolean successful) {
+        this.successful = successful;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public void setEnrolledCourses(List<Course> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
+    }
 
 }
