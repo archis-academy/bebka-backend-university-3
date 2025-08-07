@@ -10,5 +10,6 @@ public interface StudentDao {
     void updateStudent(long studentNumber, String newFullName, String newEmail);
     Student getStudentByNumber(long studentNumber);
     List<Student> getAllStudents();
+    void getRecommendedCoursesForStudent(long studentId);
 }
 
