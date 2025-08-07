@@ -32,7 +32,7 @@ public class InstructorService {
     {
         return instructorDao.getAllInstructors();
     }
-    public void findByInstructorNumber (long instructorNumber){
+    public Instructor findByInstructorNumber (long instructorNumber){
         Instructor instructor= instructorDao.findByInstructorNumber( instructorNumber);
         if(instructor== null){
             System.out.println("Eğitmen bulunamadı");
@@ -45,6 +45,11 @@ public class InstructorService {
                 instructor.getInstructorName(),
                 instructor.getEmail(),
                 instructor.getInstructorNumber());
+        return instructor;
+    }
+
+    public double getAverageGradeByInstructorId(long instructorId){
+        return instructorDao.getAverageGradeByInstructorId(instructorId);
     }
 
     public void getTopRecommendedCourses(long instructorId, int topCount) {

@@ -1,7 +1,9 @@
 package com.archisacademy.dao.impl;
 
+import com.archisacademy.dao.CourseStudentDao;
 import com.archisacademy.dao.InstructorDao;
 import com.archisacademy.model.Course;
+import com.archisacademy.model.CourseStudent;
 import com.archisacademy.model.Instructor;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
@@ -175,6 +177,32 @@ public class InstructorDaoImpl implements InstructorDao {
             }
             System.err.println("En çok önerilen kurslar listelenirken bir hata oluştu: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public double getAverageGradeByInstructorId(long instructorId) {
+
+        double total = 0;
+        int count = 0;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // Instructor’a ait tüm not kayıtlarını getiriyoruz
+            String hql = "SELECT cs.grade " +
+                    "FROM CourseStudent cs " +
+                    "JOIN cs.course c " +
+                    "WHERE c.courseInstructor.id = :instructorId AND cs.grade IS NOT NULL";
+
+            List<Double> grades = session.createQuery(hql, Double.class)
+                    .setParameter("instructorId", instructorId)
+                    .getResultList();
+
+            for (Double grade : grades) {
+                total += grade;
+                count++;
+            }
+
+            return count > 0 ? total / count : 0.0;
         }
     }
 }

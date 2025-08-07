@@ -14,4 +14,5 @@ public interface InstructorDao {
     List<Instructor> getAllInstructors();
     Instructor findByInstructorNumber(long instructorNumber);
     void getTopRecommendedCourses(long instructorId, int topCount);
+    double getAverageGradeByInstructorId(long instructorId);
 }
