@@ -3,11 +3,14 @@ package com.archisacademy.dao.impl;
 import com.archisacademy.dao.InstructorDao;
 import com.archisacademy.model.Course;
 import com.archisacademy.model.Instructor;
+import com.archisacademy.model.Student;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class InstructorDaoImpl implements InstructorDao {
@@ -135,6 +138,39 @@ public class InstructorDaoImpl implements InstructorDao {
             System.out.println("Eğitmen aranırken Hata");
             return null;
         }
+    }
+
+    @Override
+    public long getTotalStudentCountByInstructorId(long instructorId) {
+        long studentCount = 0;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Instructor instructor = session.get(Instructor.class, instructorId);
+            if (instructor == null) {
+                return 0;
+            }
+
+            List<Course> taughtCourses = instructor.getTaughtCourses();
+            if (taughtCourses == null || taughtCourses.isEmpty()) {
+                return 0;
+            }
+
+            Set<Long> uniqueStudentIds = new HashSet<>();
+            for (Course course : taughtCourses) {
+                List<Student> students = course.getEnrolledStudents();
+                if (students != null) {
+                    for (Student student : students) {
+                        uniqueStudentIds.add(student.getId());
+                    }
+                }
+            }
+
+            studentCount = uniqueStudentIds.size();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return studentCount;
     }
 }
 

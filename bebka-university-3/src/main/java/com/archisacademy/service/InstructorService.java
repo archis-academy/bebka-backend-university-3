@@ -45,4 +45,15 @@ public class InstructorService {
                 instructor.getEmail(),
                 instructor.getInstructorNumber());
     }
+    public long getTotalStudentCountByInstructorId(long instructorId) {
+        long count = instructorDao.getTotalStudentCountByInstructorId(instructorId);
+
+        if (count == 0) {
+            System.out.println("Eğitmen bulunamadı veya hiç öğrencisi yok.");
+        } else {
+            System.out.println("Eğitmenin toplam öğrenci sayısı: " + count);
+        }
+
+        return count;
+    }
 }
