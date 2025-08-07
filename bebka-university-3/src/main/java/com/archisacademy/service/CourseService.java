@@ -5,6 +5,7 @@ import com.archisacademy.model.Course;
 import com.archisacademy.model.Instructor;
 import com.archisacademy.model.Student;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,13 +30,12 @@ public class CourseService {
         courseDao.updateCourse(course);
     }
 
-    public void deleteCourseById(long courseId)
-    {
+    public void deleteCourseById(long courseId) {
         courseDao.deleteCourseById(courseId);
     }
 
 
-    public List<Course> getAllCourses(){
+    public List<Course> getAllCourses() {
         List<Course> courses = courseDao.getAllCourses();
         System.out.printf(" %-15s | %-15s | %-15s \n",
                 "Kurs Adı", "Kurs No", "Eğitmen Adı");
@@ -50,7 +50,8 @@ public class CourseService {
         }
         return courses;
     }
-    public List<Course> getPopularCourses(int topCount){
+
+    public List<Course> getPopularCourses(int topCount) {
         List<Course> popularCourses = courseDao.getPopularCourses(topCount);
         System.out.println("\n--------- | Kayıtlı Öğrenci Sayısına Göre En Popüler Kurslar | ---------");
         System.out.printf(" %-15s | %-15s | %-15s | %-10s\n",
@@ -68,30 +69,32 @@ public class CourseService {
         }
         return popularCourses;
     }
-    public Course getCourseById(Long id){
-        if (id==null || id<=0){
+
+    public Course getCourseById(Long id) {
+        if (id == null || id <= 0) {
             throw new IllegalArgumentException("GEÇERSİZ KURS ID!!");
         }
         return courseDao.getCourseById(id);
     }
-    public Course getCourseByNumber(Long courseNumber){
-        if (courseNumber==null || courseNumber<=0){
+
+    public Course getCourseByNumber(Long courseNumber) {
+        if (courseNumber == null || courseNumber <= 0) {
             throw new IllegalArgumentException("GEÇERSİZ KURS NUMARASI!!");
         }
         return courseDao.getCourseByNumber(courseNumber);
     }
-    public List <Course> getCoursesByStudentId(long id){
-        List <Course> enrolledCourses=courseDao.getCoursesByStudentId(id);
-        if (enrolledCourses != null && !enrolledCourses.isEmpty()){
+
+    public List<Course> getCoursesByStudentId(long id) {
+        List<Course> enrolledCourses = courseDao.getCoursesByStudentId(id);
+        if (enrolledCourses != null && !enrolledCourses.isEmpty()) {
             System.out.println("Öğrenciye ait kurslar:");
-        }else {
+        } else {
             System.out.println("Öğrenciye ait kurs bulunamadı!!");
         }
         return enrolledCourses;
     }
 
-    public List<Course> searchCoursesByName(String courses,String instructorid)
-    {
+    public List<Course> searchCoursesByName(String courses, String instructorid) {
         Map<String, String> filters = new HashMap<>();
         filters.put("instructorId", instructorid);
 
@@ -100,4 +103,22 @@ public class CourseService {
         return courseslist;
     }
 
+    public List<String> getEnrolledStudentNamesByCourseId(long courseId) {
+
+        Course course = courseDao.findByIdWithStudents(courseId);
+
+        if (course == null) {
+            System.out.println("UYARI: " + courseId + " ID'li kurs bulunamadı!");
+
+            return new ArrayList<>();
+        }
+
+        List<String> studentNames = new ArrayList<>();
+
+        for (Student student : course.getEnrolledStudents()) {
+
+            studentNames.add(student.getName());
+        }
+        return studentNames;
+    }
 }

@@ -18,4 +18,6 @@ public interface CourseDao {
     Course getCourseByNumber(Long courseNumber);
     List<Course> getCoursesByStudentId(long id);
     List<Course> searchCoursesByName(String courseName, Map<String, String> filters);
+
+    Course findByIdWithStudents(long courseId);
 }

@@ -227,5 +227,20 @@ public class CourseDaoImpl implements CourseDao {
 
         return result;
     }
+    @Override
+    public Course findByIdWithStudents(long courseId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            Course course = session.createQuery(
+                            "FROM Course c LEFT JOIN FETCH c.enrolledStudents WHERE c.id = :courseId", Course.class)
+                    .setParameter("courseId", courseId)
+                    .uniqueResult();
+            return course;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
 }
 

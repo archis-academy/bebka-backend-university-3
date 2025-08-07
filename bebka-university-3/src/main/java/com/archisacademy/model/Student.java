@@ -73,5 +73,8 @@ public class Student {
         return enrolledCourses;
     }
 
+    public void setEnrolledCourses(List<Course> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
+    }
 
 }
