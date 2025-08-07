@@ -11,5 +11,8 @@ public interface StudentDao {
     Student getStudentByNumber(long studentNumber);
     List<Student> getAllStudents();
     void getRecommendedCoursesForStudent(long studentId);
+
+    void deleteStudentByNumber(long studentNumber);
+
 }
 

@@ -52,6 +52,8 @@ public class StudentService {
         studentDao.getRecommendedCoursesForStudent(studentId);
     }
 
+    public void deleteStudentByNumber(long studentNumber) { studentDao.deleteStudentByNumber(studentNumber);}
+
 }
 
 
