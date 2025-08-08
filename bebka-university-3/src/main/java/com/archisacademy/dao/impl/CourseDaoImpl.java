@@ -191,6 +191,21 @@ public class CourseDaoImpl implements CourseDao {
         }
         return enrolledCourses;
     }
+    @Override
+    public Course findMostPopularCourse() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            String hql = "SELECT cs.course FROM CourseStudent cs GROUP BY cs.course ORDER BY COUNT(cs.course) DESC";
+
+            Query<Course> query = session.createQuery(hql, Course.class);
+            query.setMaxResults(1);
+
+            return query.uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public List<Course> searchCoursesByName(String searchCriteria, Map<String, String> filters) {
 
