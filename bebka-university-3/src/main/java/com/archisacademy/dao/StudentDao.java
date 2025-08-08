@@ -13,6 +13,7 @@ public interface StudentDao {
     void getRecommendedCoursesForStudent(long studentId);
 
     void deleteStudentByNumber(long studentNumber);
-
+    Student getStudentById(long studentId);
+    String getLetterGrade(long studentId, long courseId);
 }
 
