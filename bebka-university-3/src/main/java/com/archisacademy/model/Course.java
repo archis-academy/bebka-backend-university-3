@@ -31,10 +31,6 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseStudent> courseStudents;
 
-    @OneToMany(mappedBy = "course")
-    private List<CourseStudent> enrollments;
-
-
     public Course() {}
 
     public Course(String courseName, long courseNumber) {
