@@ -72,16 +72,16 @@ public class StudentDaoImpl implements StudentDao {
             transaction = session.beginTransaction();
 
             student = session.createQuery(
-                    "FROM Student WHERE studentNumber = :studentNumber", Student.class)
+                            "FROM Student WHERE studentNumber = :studentNumber", Student.class)
                     .setParameter("studentNumber", studentNumber)
                     .uniqueResult();
             transaction.commit();
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            System.err.println("Öğrenci sorgulama hatası " +e.getMessage());
+            System.err.println("Öğrenci sorgulama hatası " + e.getMessage());
         }
         return student;
     }
