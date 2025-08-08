@@ -31,6 +31,43 @@ public class StudentService {
     public void updateStudent(long studentNumber, String newFullName, String newEmail, List<Course> newEnrolledCourses) {
         studentDao.updateStudent(studentNumber, newFullName, newEmail);
     }
+    public List<Student> getAllStudents() {
+        return studentDao.getAllStudents();
+    }
+
+    public Student getStudentByNumber(long studentNumber) {
+        Student student = studentDao.getStudentByNumber(studentNumber);
+
+        if (student != null) {
+            System.out.println("Adı: " + student.getName());
+            System.out.println("Email: " + student.getEmail());
+        } else {
+            System.out.println("Öğrenci bulunamadı.");
+        }
+
+        return student;
+    }
+
+    public void printRecommendedCourses(long studentId) {
+        studentDao.getRecommendedCoursesForStudent(studentId);
+    }
+
+    public void deleteStudentByNumber(long studentNumber) { studentDao.deleteStudentByNumber(studentNumber);}
+
+    public Student getStudentById(long id)
+    {
+        return studentDao.getStudentById(id);
+    }
+
+    public int getTotalCourseHour(long studentId)
+    {
+        return  studentDao.getTotalCourseHour(studentId);
+    }
+
+    public void assignCourseToStudent(long studentId,long courseId){
+        studentDao.assignCourseToStudent(studentId,courseId);
+    }
+
 
     public Student getStudentById(long id)
     {

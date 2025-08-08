@@ -1,6 +1,7 @@
 package com.archisacademy.service;
 
 import com.archisacademy.dao.InstructorDao;
+import com.archisacademy.model.Course;
 import com.archisacademy.model.Instructor;
 
 import java.util.List;
@@ -31,5 +32,27 @@ public class InstructorService {
     {
         return instructorDao.getAllInstructors();
     }
+    public Instructor findByInstructorNumber (long instructorNumber){
+        Instructor instructor= instructorDao.findByInstructorNumber( instructorNumber);
+        if(instructor== null){
+            System.out.println("Eğitmen bulunamadı");
 
+        }
+        System.out.printf("%-5s | %-20s | %-25s | %-15s%n", "ID", "Adı", "Email", "Numarası");
+
+        System.out.printf("%-5d | %-20s | %-25s | %-15d%n",
+                instructor.getId(),
+                instructor.getInstructorName(),
+                instructor.getEmail(),
+                instructor.getInstructorNumber());
+        return instructor;
+    }
+
+    public double getAverageGradeByInstructorId(long instructorId){
+        return instructorDao.getAverageGradeByInstructorId(instructorId);
+    }
+
+    public void getTopRecommendedCourses(long instructorId, int topCount) {
+        instructorDao.getTopRecommendedCourses(instructorId, topCount);
+    }
 }

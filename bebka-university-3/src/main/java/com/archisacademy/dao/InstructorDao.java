@@ -12,4 +12,7 @@ public interface InstructorDao {
     void deleteInstructor(long instructorNumber);
     void updateInstructor(long instructorNumber, String newInstructorName, String newEmail);
     List<Instructor> getAllInstructors();
+    Instructor findByInstructorNumber(long instructorNumber);
+    void getTopRecommendedCourses(long instructorId, int topCount);
+    double getAverageGradeByInstructorId(long instructorId);
 }

@@ -20,6 +20,9 @@ public class Student {
     @ManyToMany(mappedBy = "enrolledStudents")
     private List<Course> enrolledCourses;
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseStudent> courseStudents;
+
     public Student(){}
     public Student( String name, long studentNumber, String email, String password){
         this.name=name;
@@ -27,6 +30,15 @@ public class Student {
         this.email=email;
         this.password=password;
         this.enrolledCourses=new ArrayList<>();
+        this.courseStudents=new ArrayList<>();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -65,6 +77,9 @@ public class Student {
         return enrolledCourses;
     }
 
+    public List<CourseStudent> getCourseStudents() {
+        return courseStudents;
+    }
     public void setEnrolledCourses(List<Course> enrolledCourses) {
         this.enrolledCourses = enrolledCourses;
     }
@@ -78,5 +93,7 @@ public class Student {
         }
     }
 
-
+    public void setCourseStudents(List<CourseStudent> courseStudents) {
+        this.courseStudents = courseStudents;
+    }
 }

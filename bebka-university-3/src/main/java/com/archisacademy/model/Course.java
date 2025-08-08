@@ -21,13 +21,17 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private Instructor courseInstructor;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "course_student", // Ara tablo
             joinColumns = @JoinColumn(name = "course_id"), // Bu tablonun id'si
             inverseJoinColumns = @JoinColumn(name = "student_id") // Diğer tablonun id'si
     )
     private List<Student> enrolledStudents;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseStudent> courseStudents;
+
     public Course() {}
 
     public Course(String courseName, long courseNumber , long courseHour) {
@@ -35,6 +39,7 @@ public class Course {
         this.courseNumber = courseNumber;
         this.enrolledStudents = new ArrayList<>();
         this.courseHour=courseHour;
+        this.courseStudents = new ArrayList<>();
     }
 
     public long getId() {
@@ -91,5 +96,13 @@ public class Course {
                 this.enrolledStudents = new ArrayList<>();
             }
             this.enrolledStudents.add(student);
+    }
+
+    public List<CourseStudent> getCourseStudents() {
+        return courseStudents;
+    }
+
+    public void setCourseStudents(List<CourseStudent> courseStudents) {
+        this.courseStudents = courseStudents;
     }
 }
