@@ -137,4 +137,13 @@ public class InstructorDaoImpl implements InstructorDao {
         }
     }
 }
+@Override
+public Instructor findByInstructorId(Long instructorId) {
+    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        return session.get(Instructor.class, instructorId);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return null;
+}
 
