@@ -47,3 +47,6 @@ public class CourseService {
         return courses;
     }
 }
+    public interface CourseService {
+     void updateCourseContent(long courseId, String newContent);
+}
