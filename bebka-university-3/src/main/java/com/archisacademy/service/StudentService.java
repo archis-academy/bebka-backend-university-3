@@ -1,6 +1,8 @@
 package com.archisacademy.service;
 
+import com.archisacademy.dao.CourseDao;
 import com.archisacademy.dao.StudentDao;
+import com.archisacademy.dao.impl.CourseDaoImpl;
 import com.archisacademy.model.Course;
 import com.archisacademy.model.Student;
 import com.archisacademy.util.HibernateUtil;
@@ -53,6 +55,20 @@ public class StudentService {
     }
 
     public void deleteStudentByNumber(long studentNumber) { studentDao.deleteStudentByNumber(studentNumber);}
+
+    public Student getStudentById(long studentId) {
+        return studentDao.getStudentById(studentId);
+    }
+
+    public String getLetterGrade(long studentId, long courseId) {
+        String letterGrade = studentDao.getLetterGrade(studentId, courseId);
+        Student student = studentDao.getStudentById(studentId);
+        CourseDao courseDao = new CourseDaoImpl();
+        Course course = courseDao.getCourseById(courseId);
+        System.out.printf("Öğrenci Adı: %s | Kurs Adı: %s | Harf Notu: %s\n",
+                student.getName(), course.getCourseName(), letterGrade);
+        return studentDao.getLetterGrade(studentId, courseId);
+    }
 
 }
 
