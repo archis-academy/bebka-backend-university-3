@@ -23,7 +23,7 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseStudent> courseStudents;
 
-    public Student(){}
+     public Student(){}
     public Student( String name, long studentNumber, String email, String password){
         this.name=name;
         this.studentNumber=studentNumber;
