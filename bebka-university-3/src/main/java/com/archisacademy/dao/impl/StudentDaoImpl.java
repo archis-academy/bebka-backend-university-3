@@ -112,5 +112,75 @@ public class StudentDaoImpl implements StudentDao {
         }
         return students;
     }
+
+    @Override
+    public void getRecommendedCoursesForStudent(long studentId) {
+        Transaction transaction = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Student student = session.get(Student.class, studentId);
+            if (student == null) {
+                System.out.println("Öğrenci bulunamadı. ID: " + studentId);
+                return;
+            }
+
+            Query<Course> query = session.createQuery(
+                    "SELECT c FROM Course c WHERE c.id NOT IN " +
+                            "(SELECT ec.id FROM Student s JOIN s.enrolledCourses ec WHERE s.id = :studentId)", Course.class);
+
+            query.setParameter("studentId", studentId);
+            List<Course> recommendedCourses = query.getResultList();
+
+            System.out.println("--- Öğrenci ID " + studentId + " için Önerilen Kurslar Listeleniyor ---");
+            if (recommendedCourses.isEmpty()) {
+                System.out.println("Önerilen kurs bulunamadı.");
+            } else {
+                System.out.println("Önerilen " + recommendedCourses.size() + " kurs:");
+                for (Course course : recommendedCourses) {
+                    System.out.println("- Kurs Adı: " + course.getCourseName());
+                }
+            }
+            System.out.println("--- Liste Sonlandı ---");
+
+            transaction.commit();
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.err.println("Önerilen kurslar getirilirken bir hata oluştu: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
+
+    @Override
+    public void deleteStudentByNumber(long studentNumber) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Student student = session.createQuery(
+                            "FROM Student WHERE studentNumber = :studentNumber", Student.class)
+                    .setParameter("studentNumber", studentNumber)
+                    .uniqueResult();
+
+            if (student != null) {
+                session.delete(student);
+                System.out.println("Öğrenci silindi.");
+            } else {
+                System.out.println("Öğrenci bulunamadı!");
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+}
 

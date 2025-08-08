@@ -48,6 +48,11 @@ public class StudentService {
         return student;
     }
 
+    public void printRecommendedCourses(long studentId) {
+        studentDao.getRecommendedCoursesForStudent(studentId);
+    }
+
+    public void deleteStudentByNumber(long studentNumber) { studentDao.deleteStudentByNumber(studentNumber);}
 
 }
 
