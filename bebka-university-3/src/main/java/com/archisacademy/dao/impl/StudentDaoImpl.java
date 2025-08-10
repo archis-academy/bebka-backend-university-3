@@ -3,6 +3,7 @@ package com.archisacademy.dao.impl;
 
 import com.archisacademy.dao.StudentDao;
 import com.archisacademy.model.Course;
+import com.archisacademy.model.CourseStudent;
 import com.archisacademy.model.Student;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
@@ -235,5 +236,64 @@ public class StudentDaoImpl implements StudentDao {
         }
     }
 
+    @Override
+    public Student getStudentById(long studentId) {
+        Transaction tx = null;
+        Student student = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            student = session.get(Student.class, studentId);
+            tx.commit();
+        }  catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+        return student;
+    }
+
+    @Override
+    public String getLetterGrade(long studentId, long courseId) {
+        String letterGrade = "";
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            CourseStudent courseStudent = session.createQuery(
+                            "FROM CourseStudent cs WHERE cs.student.id = :studentId AND cs.course.id = :courseId",
+                            CourseStudent.class)
+                    .setParameter("studentId", studentId)
+                    .setParameter("courseId", courseId)
+                    .uniqueResult();
+            if (courseStudent != null && courseStudent.getGrade() != null) {
+                double grade = courseStudent.getGrade();
+
+                if (grade >= 90) {
+                    letterGrade = "AA";
+                } else if (grade >= 85) {
+                    letterGrade = "BA";
+                } else if (grade >= 80) {
+                    letterGrade = "BB";
+                } else if (grade >= 75) {
+                    letterGrade = "CB";
+                } else if (grade >= 70) {
+                    letterGrade = "CC";
+                } else if (grade >= 65) {
+                    letterGrade = "DC";
+                } else if (grade >= 60) {
+                    letterGrade = "DD";
+                } else {
+                    letterGrade = "FF";
+                }
+            }
+            tx.commit();
+        }  catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+        return letterGrade;
+    }
 }
 

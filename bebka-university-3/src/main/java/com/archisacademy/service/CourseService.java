@@ -100,5 +100,17 @@ public class CourseService {
 
         return courseslist;
     }
+    public Course findMostPopularCourse() {
+        System.out.println("En popüler kurs aranıyor...");
+        Course popularCourse = courseDao.findMostPopularCourse();
+
+        if (popularCourse != null) {
+            System.out.println("En popüler kurs bulundu: " + popularCourse.getCourseName());
+        } else {
+            System.out.println("Sistemde görüntülenecek kurs bulunamadı.");
+        }
+
+        return popularCourse;
+    }
 
 }

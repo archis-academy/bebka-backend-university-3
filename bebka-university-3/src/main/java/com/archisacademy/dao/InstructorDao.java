@@ -13,6 +13,7 @@ public interface InstructorDao {
     void updateInstructor(long instructorNumber, String newInstructorName, String newEmail);
     List<Instructor> getAllInstructors();
     Instructor findByInstructorNumber(long instructorNumber);
+    long getTotalStudentCountByInstructorId(long instructorId);
     void getTopRecommendedCourses(long instructorId, int topCount);
     double getAverageGradeByInstructorId(long instructorId);
 }
