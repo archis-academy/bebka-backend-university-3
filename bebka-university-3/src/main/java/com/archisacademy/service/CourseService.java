@@ -16,15 +16,16 @@ public class CourseService {
         this.courseDao = courseDao;
     }
 
-    public Course addCourse(String courseName, long courseNumber, Instructor instructor, List<Student> enrolledStudents) {
-        Course course = new Course(courseName, courseNumber);
+
+    public Course addCourse(String courseName, long courseNumber, long courseHour,List<Student> enrolledStudents,Instructor instructor) {
+        Course course = new Course(courseName, courseNumber,courseHour);
         course.setCourseInstructor(instructor);
         course.setEnrolledStudents(enrolledStudents);
         return courseDao.addCourse(course);
     }
 
-    public void updateCourse(String courseName, long courseNumber, Instructor instructor) {
-        Course course = new Course(courseName, courseNumber);
+    public void updateCourse(String courseName, long courseNumber,long  courseHour, Instructor instructor) {
+        Course course = new Course(courseName, courseNumber,courseHour);
         course.setCourseInstructor(instructor);
         courseDao.updateCourse(course);
     }

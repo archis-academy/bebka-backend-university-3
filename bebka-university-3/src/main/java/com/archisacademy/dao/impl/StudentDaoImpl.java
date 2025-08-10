@@ -65,6 +65,9 @@ public class StudentDaoImpl implements StudentDao {
         }
     }
 
+    public Student getStudentById(long id) {
+        Student student = null;
+
     @Override
     public Student getStudentByNumber(long studentNumber) {
         Transaction transaction = null;
@@ -73,16 +76,16 @@ public class StudentDaoImpl implements StudentDao {
             transaction = session.beginTransaction();
 
             student = session.createQuery(
-                    "FROM Student WHERE studentNumber = :studentNumber", Student.class)
+                            "FROM Student WHERE studentNumber = :studentNumber", Student.class)
                     .setParameter("studentNumber", studentNumber)
                     .uniqueResult();
             transaction.commit();
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            System.err.println("Öğrenci sorgulama hatası " +e.getMessage());
+            System.err.println("Öğrenci sorgulama hatası " + e.getMessage());
         }
         return student;
     }
@@ -181,6 +184,55 @@ public class StudentDaoImpl implements StudentDao {
                 transaction.rollback();
             }
             e.printStackTrace();
+        }
+    }
+
+    public Student getStudentById(long id) {
+        Student student = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            student = session.get(Student.class, id);
+
+            if (student != null) {
+                System.out.println("Öğrenci bulundu: " + student.getName());
+            } else {
+                System.out.println("ID ile öğrenci bulunamadı.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return student;
+    }
+
+    public int getTotalCourseHour(long studentId) {
+        int totalCourseHour = 0;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Student student = session.get(Student.class, studentId);
+
+            if (student != null) {
+                List<Course> courses = student.getEnrolledCourses();
+                for (Course course : courses) {
+                    totalCourseHour += course.getCourseHour();
+                }
+            } else {
+                System.out.println("Öğrenci bulunamadı. ID: " + studentId);
+            }
+        } catch (Exception e) {
+            System.out.println("Hata oluştu: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return totalCourseHour;
+    }
+    public List<Long> getCoursesByStudentId(long studentId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String sql = "SELECT course_id FROM course_student WHERE student_id = :studentId";
+            List<Long> courseIds = session.createNativeQuery(sql)
+                    .setParameter("studentId", studentId)
+                    .list();
+            return courseIds;
         }
     }
 

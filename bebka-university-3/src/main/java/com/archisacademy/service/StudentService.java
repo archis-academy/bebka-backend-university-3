@@ -56,6 +56,35 @@ public class StudentService {
 
     public void deleteStudentByNumber(long studentNumber) { studentDao.deleteStudentByNumber(studentNumber);}
 
+    public Student getStudentById(long id)
+    {
+        return studentDao.getStudentById(id);
+    }
+
+    public int getTotalCourseHour(long studentId)
+    {
+        return  studentDao.getTotalCourseHour(studentId);
+    }
+
+    public void assignCourseToStudent(long studentId,long courseId){
+        studentDao.assignCourseToStudent(studentId,courseId);
+    }
+
+
+    public Student getStudentById(long id)
+    {
+        return studentDao.getStudentById(id);
+    }
+
+    public int getTotalCourseHour(long studentId)
+    {
+        return  studentDao.getTotalCourseHour(studentId);
+    }
+  
+    public List<Long>getCoursesByStudentId(long studentId)
+    {
+      return studentDao.getCoursesByStudentId(studentId);
+
     public Student getStudentById(long studentId) {
         return studentDao.getStudentById(studentId);
     }
