@@ -15,7 +15,6 @@ public interface StudentDao {
     List<Student> getAllStudents();
     void getRecommendedCoursesForStudent(long studentId);
     void deleteStudentByNumber(long studentNumber);
-    Student getStudentById(long studentId);
     String getLetterGrade(long studentId, long courseId);
 }
 

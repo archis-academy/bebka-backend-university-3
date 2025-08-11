@@ -3,6 +3,7 @@ package com.archisacademy.dao;
 
 import com.archisacademy.model.Course;
 import com.archisacademy.model.Instructor;
+import com.archisacademy.model.Student;
 
 import java.util.List;
 
