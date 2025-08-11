@@ -2,7 +2,7 @@ package com.archisacademy.model;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "course_reports")
@@ -16,10 +16,10 @@ public class CourseReport {
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
-    private Double SuccessRate;
+    private Double successRate;
     private String feedback;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Double attandance;
 
     public long getId() {
@@ -46,19 +46,19 @@ public class CourseReport {
         this.student = student;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -71,11 +71,11 @@ public class CourseReport {
     }
 
     public Double getSuccessRate() {
-        return SuccessRate;
+        return successRate;
     }
 
     public void setSuccessRate(Double successRate) {
-        SuccessRate = successRate;
+        this.successRate = successRate;
     }
 
     public String getFeedback() {
@@ -86,10 +86,10 @@ public class CourseReport {
         this.feedback = feedback;
     }
     public CourseReport() {}
-    public CourseReport(Course course, Student student, Double successRate, String feedback, Date startDate, Date endDate, Double attandance) {
+    public CourseReport(Course course, Student student, Double successRate, String feedback, LocalDate startDate, LocalDate endDate, Double attandance) {
         this.course = course;
         this.student = student;
-        this.SuccessRate = successRate;
+        this.successRate = successRate;
         this.feedback = feedback;
         this.startDate = startDate;
         this.endDate = endDate;

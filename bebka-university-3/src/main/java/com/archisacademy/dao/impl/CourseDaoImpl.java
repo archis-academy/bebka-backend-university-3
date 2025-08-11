@@ -227,28 +227,17 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public List<CourseReport> attendanceReport(long studentId, Date startDate, Date endDate) {
-        Transaction transaction = null;
+    public List<CourseReport> attendanceReport(long studentId) {
+        List<CourseReport> result = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            String hql = "FROM CourseReport cr " +
-                    "WHERE cr.student.id = :studentId " +
-                    "AND cr.startDate >= :startDate " +
-                    "AND cr.endDate <= :endDate";
+            String hql = "FROM CourseReport cr WHERE cr.student.id = :studentId";
             Query<CourseReport> query = session.createQuery(hql, CourseReport.class);
             query.setParameter("studentId", studentId);
-            query.setParameter("startDate", startDate);
-            query.setParameter("endDate", endDate);
-            List<CourseReport> result = query.list();
-            transaction.commit();
-            return result;
+            return query.list();
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
         }
-        return List.of();
+        return result;
     }
 
     public List<Course> searchCoursesByName(String searchCriteria, Map<String, String> filters) {

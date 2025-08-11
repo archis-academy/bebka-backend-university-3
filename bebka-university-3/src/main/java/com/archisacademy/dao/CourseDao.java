@@ -22,5 +22,5 @@ public interface CourseDao {
     List<Course> searchCoursesByName(String courseName, Map<String, String> filters);
     Course findMostPopularCourse();
     List<CourseReport> courseReport(long courseId);
-    List<CourseReport> attendanceReport(long studentId, Date startDate, Date endDate);
+    List<CourseReport> attendanceReport(long studentId);
 }

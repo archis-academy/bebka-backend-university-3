@@ -8,6 +8,7 @@ import com.archisacademy.model.CourseReport;
 import com.archisacademy.model.Instructor;
 import com.archisacademy.model.Student;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -118,31 +119,38 @@ public class CourseService {
     }
 
     public List<CourseReport>  courseReport(long courseId) {
-        //System.out.printf("Öğrenci ID: %d | Kurs ID: %d için kurs raporu oluşturuluyor...\n", studentId, courseId);
         List<CourseReport> reports = courseDao.courseReport(courseId);
-        //StudentDao studentDao = new StudentDaoImpl();
-
+        System.out.printf(" %-15s | %-15s | %-15s | %-15s | %-15s \n",
+                "Kurs", "Öğrenci", "Feedback", "Başarı Oranı", "Katıldığı ders sayısı");
+        System.out.println("-----------------------------------------------------------------------------------------------");
         for (CourseReport report : reports) {
-            System.out.println(report.getCourse().getCourseName() + " - " +
-                    report.getStudent().getName() +
-                    report.getSuccessRate()+
-                    " | Feedback: " + report.getFeedback());
-            return courseDao.courseReport(courseId);
+            System.out.printf(" %-15s | %-15s | %-15s | %-15s | %-15s\n",
+                    report.getCourse().getCourseName(),
+                    report.getStudent().getName(),
+                    report.getFeedback(),
+                    report.getSuccessRate(),
+                    report.getAttandance()
+            );
         }
         return reports;
-
     }
 
-    public List<CourseReport> attendanceReport(long studentId, Date startDate, Date endDate) {
-        //System.out.printf("Öğrenci ID: %d | Başlangıç Tarihi: %s | Bitiş Tarihi: %s için katılım raporu oluşturuluyor...\n", studentId, startDate, endDate);
-        List<CourseReport> reports = courseDao.attendanceReport(studentId, startDate, endDate);
+    public List<CourseReport> attendanceReport(long studentId) {
+        List<CourseReport> reports = courseDao.attendanceReport(studentId);
 
+        System.out.printf(" %-15s | %-15s | %-15s \n",
+                "Kurs", "Öğrenci", "Katılım oranı");
+        System.out.println("-----------------------------------------------------");
         for (CourseReport report : reports) {
-            System.out.println(report.getCourse().getCourseName() + " - " +
-                    report.getStudent().getName() +
-                    report.getAttandance()+
-                    " | Başlangıç Tarihi: " + report.getStartDate() +
-                    " | Bitiş Tarihi: " + report.getEndDate());
+            long totalDays = ChronoUnit.DAYS.between(report.getStartDate(), report.getEndDate()) + 1;
+            long attendedDays = Math.round((report.getAttandance() / 100.0) * totalDays);
+            double calculatedPercentage = (attendedDays / (double) totalDays) * 100;
+            report.setAttandance(calculatedPercentage);
+            System.out.printf(" %-15s | %-15s | %-10s\n",
+                    report.getCourse().getCourseName(),
+                    report.getStudent().getName(),
+                    String.format("%.2f", report.getAttandance()) + "%"
+            );
         }
         return reports;
     }
