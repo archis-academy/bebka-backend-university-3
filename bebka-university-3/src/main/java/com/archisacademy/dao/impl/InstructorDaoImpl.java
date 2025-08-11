@@ -241,5 +241,21 @@ public class InstructorDaoImpl implements InstructorDao {
 
         return studentCount;
     }
+
+    @Override
+    public Student getInstructorsHighestNote(long instructorNumber)
+    {
+        try(Session session = HibernateUtil.getSessionFactory().openSession())
+        {
+            Instructor instructor=  findByInstructorNumber(instructorNumber);
+            List<Course> courses=   instructor.getTaughtCourses();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
 
