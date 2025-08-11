@@ -1,10 +1,14 @@
 package com.archisacademy.service;
 
 import com.archisacademy.dao.CourseDao;
+import com.archisacademy.dao.StudentDao;
+import com.archisacademy.dao.impl.StudentDaoImpl;
 import com.archisacademy.model.Course;
+import com.archisacademy.model.CourseReport;
 import com.archisacademy.model.Instructor;
 import com.archisacademy.model.Student;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,4 +117,34 @@ public class CourseService {
         return popularCourse;
     }
 
+    public List<CourseReport>  courseReport(long courseId) {
+        //System.out.printf("Öğrenci ID: %d | Kurs ID: %d için kurs raporu oluşturuluyor...\n", studentId, courseId);
+        List<CourseReport> reports = courseDao.courseReport(courseId);
+        //StudentDao studentDao = new StudentDaoImpl();
+
+        for (CourseReport report : reports) {
+            System.out.println(report.getCourse().getCourseName() + " - " +
+                    report.getStudent().getName() +
+                    report.getSuccessRate()+
+                    " | Feedback: " + report.getFeedback());
+            return courseDao.courseReport(courseId);
+        }
+        return reports;
+
+    }
+
+    public List<CourseReport> attendanceReport(long studentId, Date startDate, Date endDate) {
+        //System.out.printf("Öğrenci ID: %d | Başlangıç Tarihi: %s | Bitiş Tarihi: %s için katılım raporu oluşturuluyor...\n", studentId, startDate, endDate);
+        List<CourseReport> reports = courseDao.attendanceReport(studentId, startDate, endDate);
+
+        for (CourseReport report : reports) {
+            System.out.println(report.getCourse().getCourseName() + " - " +
+                    report.getStudent().getName() +
+                    report.getAttandance()+
+                    " | Başlangıç Tarihi: " + report.getStartDate() +
+                    " | Bitiş Tarihi: " + report.getEndDate());
+        }
+        return reports;
+    }
 }
+

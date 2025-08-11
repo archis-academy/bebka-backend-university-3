@@ -22,6 +22,7 @@
         <mapping class="com.archisacademy.model.Course"/>
         <mapping class="com.archisacademy.model.Instructor"/>
         <mapping class="com.archisacademy.model.CourseStudent"/>
+        <mapping class="com.archisacademy.model.CourseReport"/>
 
     </session-factory>
 </hibernate-configuration>

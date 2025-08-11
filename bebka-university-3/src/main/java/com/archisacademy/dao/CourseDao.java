@@ -1,8 +1,10 @@
 package com.archisacademy.dao;
 
 import com.archisacademy.model.Course;
+import com.archisacademy.model.CourseReport;
 import com.archisacademy.model.Student;
 
+import java.util.Date;
 import java.util.List;
 
 import java.util.List;
@@ -19,4 +21,6 @@ public interface CourseDao {
     List<Course> getCoursesByStudentId(long id);
     List<Course> searchCoursesByName(String courseName, Map<String, String> filters);
     Course findMostPopularCourse();
+    List<CourseReport> courseReport(long courseId);
+    List<CourseReport> attendanceReport(long studentId, Date startDate, Date endDate);
 }

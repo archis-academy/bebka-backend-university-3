@@ -2,6 +2,7 @@ package com.archisacademy.dao.impl;
 
 import com.archisacademy.dao.CourseDao;
 import com.archisacademy.model.Course;
+import com.archisacademy.model.CourseReport;
 import com.archisacademy.model.Student;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
@@ -10,6 +11,7 @@ import org.hibernate.query.Query;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -205,6 +207,48 @@ public class CourseDaoImpl implements CourseDao {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public List<CourseReport> courseReport(long courseId) {
+        Transaction transaction= null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            String hql = "FROM CourseReport cr WHERE cr.course.id = :courseId ";
+            Query<CourseReport> query = session.createQuery(hql, CourseReport.class);
+            query.setParameter("courseId", courseId);
+
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    @Override
+    public List<CourseReport> attendanceReport(long studentId, Date startDate, Date endDate) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            String hql = "FROM CourseReport cr " +
+                    "WHERE cr.student.id = :studentId " +
+                    "AND cr.startDate >= :startDate " +
+                    "AND cr.endDate <= :endDate";
+            Query<CourseReport> query = session.createQuery(hql, CourseReport.class);
+            query.setParameter("studentId", studentId);
+            query.setParameter("startDate", startDate);
+            query.setParameter("endDate", endDate);
+            List<CourseReport> result = query.list();
+            transaction.commit();
+            return result;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return List.of();
     }
 
     public List<Course> searchCoursesByName(String searchCriteria, Map<String, String> filters) {
