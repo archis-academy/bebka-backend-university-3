@@ -63,4 +63,5 @@ public class CourseStudent {
     public void setGrade(Double grade) {
         this.grade = grade;
     }
+
 }

@@ -16,4 +16,9 @@ public class CourseStudentService {
         CourseStudent courseStudent = new CourseStudent(course, student, grade);
         courseStudentDao.assignStudentToCourse(courseStudent);
     }
+
+    public void updateGrade(Long courseId, Long studentId, double newGrade){
+        courseStudentDao.updateGrade(courseId,studentId,newGrade);
+    }
+
 }

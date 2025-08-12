@@ -2,7 +2,9 @@
 package com.archisacademy.dao;
 
 import com.archisacademy.model.Course;
+import com.archisacademy.model.CourseStudent;
 import com.archisacademy.model.Instructor;
+import com.archisacademy.model.Student;
 
 import java.util.List;
 
@@ -16,4 +18,5 @@ public interface InstructorDao {
     long getTotalStudentCountByInstructorId(long instructorId);
     void getTopRecommendedCourses(long instructorId, int topCount);
     double getAverageGradeByInstructorId(long instructorId);
+    CourseStudent getInstructorsHighestNote(long instructorNumber);
 }
