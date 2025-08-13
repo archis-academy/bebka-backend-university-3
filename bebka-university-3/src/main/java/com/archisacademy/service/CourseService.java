@@ -1,4 +1,5 @@
 package com.archisacademy.service;
+import com.archisacademy.dao.impl.CourseDaoImpl;
 
 import com.archisacademy.dao.CourseDao;
 import com.archisacademy.model.Course;
@@ -47,6 +48,19 @@ public class CourseService {
         return courses;
     }
 }
-    public interface CourseService {
-     void updateCourseContent(long courseId, String newContent);
+    public class CourseService {
+
+    private CourseDao courseDao;
+
+    public CourseService() {
+        this.courseDao = new CourseDaoImpl();
+    }
+
+    public Course getCourseById(long courseId) {
+        return courseDao.findByCourseId(courseId);
+    }
+
+    public void updateCourseContent(long courseId, String newContent) {
+        courseDao.updateCourseContent(courseId, newContent);
+    }
 }
