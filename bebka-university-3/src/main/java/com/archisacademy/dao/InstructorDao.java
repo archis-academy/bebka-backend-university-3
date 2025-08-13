@@ -13,8 +13,5 @@ public interface InstructorDao {
     void updateInstructor(long instructorNumber, String newInstructorName, String newEmail);
     List<Instructor> getAllInstructors();
     Instructor findByInstructorNumber(long instructorNumber);
-    public interface InstructorDao {
-        Instructor findByInstructorId(Long instructorId);
-    }
-
+    Instructor findByInstructorId(Long instructorId);
 }
