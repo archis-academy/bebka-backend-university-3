@@ -11,6 +11,5 @@ public interface CourseDao {
     List<Course> getAllCourses();
     Course findByCourseId(long courseId);
     void updateCourseContent(long courseId, String newContent);
-
     }
 

@@ -64,3 +64,4 @@ public class CourseService {
         courseDao.updateCourseContent(courseId, newContent);
     }
 }
+
