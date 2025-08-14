@@ -15,7 +15,8 @@ public class Course {
     private String courseName;
     @Column(name = "course_number", unique = true, nullable = false)
     private long courseNumber;
-
+    @Column(name = "course_hour")
+    private Long courseHour;
     //SINIFLAR ARASI İLİŞKİLER
     @ManyToOne
     @JoinColumn(name = "instructor_id")
@@ -33,10 +34,11 @@ public class Course {
 
     public Course() {}
 
-    public Course(String courseName, long courseNumber) {
+    public Course(String courseName, long courseNumber , long courseHour) {
         this.courseName = courseName;
         this.courseNumber = courseNumber;
         this.enrolledStudents = new ArrayList<>();
+        this.courseHour=courseHour;
         this.courseStudents = new ArrayList<>();
     }
 
@@ -78,6 +80,22 @@ public class Course {
 
     public void setEnrolledStudents(List<Student> enrolledStudents) {
         this.enrolledStudents = enrolledStudents;
+    }
+
+ public void setCourseHour(Long courseHour){
+        this.courseHour=courseHour;
+ }
+
+    public Long getCourseHour() {
+        return courseHour;
+    }
+
+    public void addStudent(Student student) {
+
+            if (this.enrolledStudents == null) {
+                this.enrolledStudents = new ArrayList<>();
+            }
+            this.enrolledStudents.add(student);
     }
 
     public List<CourseStudent> getCourseStudents() {

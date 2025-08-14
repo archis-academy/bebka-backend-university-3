@@ -1,10 +1,15 @@
 package com.archisacademy.service;
 
 import com.archisacademy.dao.CourseDao;
+import com.archisacademy.dao.StudentDao;
+import com.archisacademy.dao.impl.StudentDaoImpl;
 import com.archisacademy.model.Course;
+import com.archisacademy.model.CourseReport;
 import com.archisacademy.model.Instructor;
 import com.archisacademy.model.Student;
 
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,15 +21,16 @@ public class CourseService {
         this.courseDao = courseDao;
     }
 
-    public Course addCourse(String courseName, long courseNumber, Instructor instructor, List<Student> enrolledStudents) {
-        Course course = new Course(courseName, courseNumber);
+
+    public Course addCourse(String courseName, long courseNumber, long courseHour,List<Student> enrolledStudents,Instructor instructor) {
+        Course course = new Course(courseName, courseNumber,courseHour);
         course.setCourseInstructor(instructor);
         course.setEnrolledStudents(enrolledStudents);
         return courseDao.addCourse(course);
     }
 
-    public void updateCourse(String courseName, long courseNumber, Instructor instructor) {
-        Course course = new Course(courseName, courseNumber);
+    public void updateCourse(String courseName, long courseNumber,long  courseHour, Instructor instructor) {
+        Course course = new Course(courseName, courseNumber,courseHour);
         course.setCourseInstructor(instructor);
         courseDao.updateCourse(course);
     }
@@ -112,4 +118,41 @@ public class CourseService {
         return popularCourse;
     }
 
+    public List<CourseReport>  courseReport(long courseId) {
+        List<CourseReport> reports = courseDao.courseReport(courseId);
+        System.out.printf(" %-15s | %-15s | %-15s | %-15s | %-15s \n",
+                "Kurs", "Öğrenci", "Feedback", "Başarı Oranı", "Katıldığı ders sayısı");
+        System.out.println("-----------------------------------------------------------------------------------------------");
+        for (CourseReport report : reports) {
+            System.out.printf(" %-15s | %-15s | %-15s | %-15s | %-15s\n",
+                    report.getCourse().getCourseName(),
+                    report.getStudent().getName(),
+                    report.getFeedback(),
+                    report.getSuccessRate(),
+                    report.getAttandance()
+            );
+        }
+        return reports;
+    }
+
+    public List<CourseReport> attendanceReport(long studentId) {
+        List<CourseReport> reports = courseDao.attendanceReport(studentId);
+
+        System.out.printf(" %-15s | %-15s | %-15s \n",
+                "Kurs", "Öğrenci", "Katılım oranı");
+        System.out.println("-----------------------------------------------------");
+        for (CourseReport report : reports) {
+            long totalDays = ChronoUnit.DAYS.between(report.getStartDate(), report.getEndDate()) + 1;
+            long attendedDays = Math.round((report.getAttandance() / 100.0) * totalDays);
+            double calculatedPercentage = (attendedDays / (double) totalDays) * 100;
+            report.setAttandance(calculatedPercentage);
+            System.out.printf(" %-15s | %-15s | %-10s\n",
+                    report.getCourse().getCourseName(),
+                    report.getStudent().getName(),
+                    String.format("%.2f", report.getAttandance()) + "%"
+            );
+        }
+        return reports;
+    }
 }
+

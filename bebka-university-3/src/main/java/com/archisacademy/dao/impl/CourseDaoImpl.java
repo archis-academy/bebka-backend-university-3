@@ -2,6 +2,7 @@ package com.archisacademy.dao.impl;
 
 import com.archisacademy.dao.CourseDao;
 import com.archisacademy.model.Course;
+import com.archisacademy.model.CourseReport;
 import com.archisacademy.model.Student;
 import com.archisacademy.util.HibernateUtil;
 import org.hibernate.Session;
@@ -10,6 +11,7 @@ import org.hibernate.query.Query;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -205,6 +207,37 @@ public class CourseDaoImpl implements CourseDao {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public List<CourseReport> courseReport(long courseId) {
+        Transaction transaction= null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            String hql = "FROM CourseReport cr WHERE cr.course.id = :courseId ";
+            Query<CourseReport> query = session.createQuery(hql, CourseReport.class);
+            query.setParameter("courseId", courseId);
+
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    @Override
+    public List<CourseReport> attendanceReport(long studentId) {
+        List<CourseReport> result = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM CourseReport cr WHERE cr.student.id = :studentId";
+            Query<CourseReport> query = session.createQuery(hql, CourseReport.class);
+            query.setParameter("studentId", studentId);
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public List<Course> searchCoursesByName(String searchCriteria, Map<String, String> filters) {

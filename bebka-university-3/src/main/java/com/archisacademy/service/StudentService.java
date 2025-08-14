@@ -19,7 +19,7 @@ public class StudentService {
         this.studentDao = studentDao;
     }
 
-    public Student createStudent(String name,long studentNumber,String email,
+    public Student createStudent(String name, long studentNumber, String email,
                                  String password) {
         Student student = new Student();
         student.setName(name);
@@ -33,6 +33,7 @@ public class StudentService {
     public void updateStudent(long studentNumber, String newFullName, String newEmail, List<Course> newEnrolledCourses) {
         studentDao.updateStudent(studentNumber, newFullName, newEmail);
     }
+
     public List<Student> getAllStudents() {
         return studentDao.getAllStudents();
     }
@@ -54,23 +55,33 @@ public class StudentService {
         studentDao.getRecommendedCoursesForStudent(studentId);
     }
 
-    public void deleteStudentByNumber(long studentNumber) { studentDao.deleteStudentByNumber(studentNumber);}
-
-    public Student getStudentById(long studentId) {
-        return studentDao.getStudentById(studentId);
+    public void deleteStudentByNumber(long studentNumber) {
+        studentDao.deleteStudentByNumber(studentNumber);
     }
 
-    public String getLetterGrade(long studentId, long courseId) {
-        String letterGrade = studentDao.getLetterGrade(studentId, courseId);
-        Student student = studentDao.getStudentById(studentId);
-        CourseDao courseDao = new CourseDaoImpl();
-        Course course = courseDao.getCourseById(courseId);
-        System.out.printf("Öğrenci Adı: %s | Kurs Adı: %s | Harf Notu: %s\n",
-                student.getName(), course.getCourseName(), letterGrade);
-        return studentDao.getLetterGrade(studentId, courseId);
+    public Student getStudentById(long id) {
+        return studentDao.getStudentById(id);
     }
 
-}
+    public int getTotalCourseHour(long studentId) {
+        return studentDao.getTotalCourseHour(studentId);
+    }
+
+    public List<Long> getCoursesByStudentId(long studentId) {
+        return studentDao.getCoursesByStudentId(studentId);
+    }
+
+        public String getLetterGrade ( long studentId, long courseId){
+            String letterGrade = studentDao.getLetterGrade(studentId, courseId);
+            Student student = studentDao.getStudentById(studentId);
+            CourseDao courseDao = new CourseDaoImpl();
+            Course course = courseDao.getCourseById(courseId);
+            System.out.printf("Öğrenci Adı: %s | Kurs Adı: %s | Harf Notu: %s\n",
+                    student.getName(), course.getCourseName(), letterGrade);
+            return studentDao.getLetterGrade(studentId, courseId);
+        }
+
+   }
 
 
 

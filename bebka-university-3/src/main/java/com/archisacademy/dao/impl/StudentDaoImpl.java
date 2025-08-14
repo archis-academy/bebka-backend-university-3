@@ -184,66 +184,99 @@ public class StudentDaoImpl implements StudentDao {
         }
     }
 
-    @Override
-    public Student getStudentById(long studentId) {
-        Transaction tx = null;
-        Student student = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
-            student = session.get(Student.class, studentId);
-            tx.commit();
-        }  catch (Exception e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        }
-        return student;
-    }
+        @Override
+        public int getTotalCourseHour ( long studentId){
+            int totalCourseHour = 0;
 
-    @Override
-    public String getLetterGrade(long studentId, long courseId) {
-        String letterGrade = "";
-        Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
-            CourseStudent courseStudent = session.createQuery(
-                            "FROM CourseStudent cs WHERE cs.student.id = :studentId AND cs.course.id = :courseId",
-                            CourseStudent.class)
-                    .setParameter("studentId", studentId)
-                    .setParameter("courseId", courseId)
-                    .uniqueResult();
-            if (courseStudent != null && courseStudent.getGrade() != null) {
-                double grade = courseStudent.getGrade();
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                Student student = session.get(Student.class, studentId);
 
-                if (grade >= 90) {
-                    letterGrade = "AA";
-                } else if (grade >= 85) {
-                    letterGrade = "BA";
-                } else if (grade >= 80) {
-                    letterGrade = "BB";
-                } else if (grade >= 75) {
-                    letterGrade = "CB";
-                } else if (grade >= 70) {
-                    letterGrade = "CC";
-                } else if (grade >= 65) {
-                    letterGrade = "DC";
-                } else if (grade >= 60) {
-                    letterGrade = "DD";
+                if (student != null) {
+                    List<Course> courses = student.getEnrolledCourses();
+                    for (Course course : courses) {
+                        totalCourseHour += course.getCourseHour();
+                    }
                 } else {
-                    letterGrade = "FF";
+                    System.out.println("Öğrenci bulunamadı. ID: " + studentId);
                 }
+            } catch (Exception e) {
+                System.out.println("Hata oluştu: " + e.getMessage());
+                e.printStackTrace();
             }
-            tx.commit();
-        }  catch (Exception e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
+
+            return totalCourseHour;
         }
-        return letterGrade;
-    }
 
+      @Override
+        public List<Long> getCoursesByStudentId ( long studentId){
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                String sql = "SELECT course_id FROM course_student WHERE student_id = :studentId";
+                List<Long> courseIds = session.createNativeQuery(sql)
+                        .setParameter("studentId", studentId)
+                        .list();
+                return courseIds;
+            }
+        }
 
+        @Override
+        public Student getStudentById ( long studentId){
+            Transaction tx = null;
+            Student student = null;
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                tx = session.beginTransaction();
+                student = session.get(Student.class, studentId);
+                tx.commit();
+            } catch (Exception e) {
+                if (tx != null) {
+                    tx.rollback();
+                }
+                e.printStackTrace();
+            }
+            return student;
+        }
+
+        @Override
+        public String getLetterGrade ( long studentId, long courseId){
+            String letterGrade = "";
+            Transaction tx = null;
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                tx = session.beginTransaction();
+                CourseStudent courseStudent = session.createQuery(
+                                "FROM CourseStudent cs WHERE cs.student.id = :studentId AND cs.course.id = :courseId",
+                                CourseStudent.class)
+                        .setParameter("studentId", studentId)
+                        .setParameter("courseId", courseId)
+                        .uniqueResult();
+                if (courseStudent != null && courseStudent.getGrade() != null) {
+                    double grade = courseStudent.getGrade();
+
+                    if (grade >= 90) {
+                        letterGrade = "AA";
+                    } else if (grade >= 85) {
+                        letterGrade = "BA";
+                    } else if (grade >= 80) {
+                        letterGrade = "BB";
+                    } else if (grade >= 75) {
+                        letterGrade = "CB";
+                    } else if (grade >= 70) {
+                        letterGrade = "CC";
+                    } else if (grade >= 65) {
+                        letterGrade = "DC";
+                    } else if (grade >= 60) {
+                        letterGrade = "DD";
+                    } else {
+                        letterGrade = "FF";
+                    }
+                }
+                tx.commit();
+            } catch (Exception e) {
+                if (tx != null) {
+                    tx.rollback();
+                }
+                e.printStackTrace();
+            }
+            return letterGrade;
+        }
 }
+
 
