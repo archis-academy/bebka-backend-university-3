@@ -66,4 +66,9 @@ public class InstructorService {
 
         return count;
     }
+
+    public void getInstructorsHighestNote(long instructorId)
+    {
+        instructorDao.getInstructorsHighestNote(instructorId);
+    }
 }

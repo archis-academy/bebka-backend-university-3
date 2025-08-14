@@ -242,5 +242,25 @@ public class InstructorDaoImpl implements InstructorDao {
         return studentCount;
     }
 
+    @Override
+    public CourseStudent getInstructorsHighestNote(long instructorId)
+    {
+        try(Session session = HibernateUtil.getSessionFactory().openSession())
+        {
+            String hql = "SELECT MAX(cs.grade) " +
+                    "FROM CourseStudent cs " +
+                    "WHERE cs.course.courseInstructor.id = :instructorId";
+
+            Double highestGrade = session.createQuery(hql, Double.class)
+                    .setParameter("instructorId", instructorId)
+                    .uniqueResult();
+            System.out.println(highestGrade);
+            }
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
 
