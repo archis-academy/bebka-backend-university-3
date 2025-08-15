@@ -23,4 +23,6 @@ public interface CourseDao {
     Course findMostPopularCourse();
     List<CourseReport> courseReport(long courseId);
     List<CourseReport> attendanceReport(long studentId);
+    Course findByCourseId(long courseId);
+    void updateCourseContent(long courseId, String newContent);
 }

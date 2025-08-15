@@ -240,6 +240,40 @@ public class CourseDaoImpl implements CourseDao {
         return result;
     }
 
+    @Override
+    public Course findByCourseId(long courseId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Course.class, courseId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public void updateCourseContent(long courseId, String newContent) {
+        Transaction tx = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+
+            Course course = session.get(Course.class, courseId);
+            if (course != null) {
+                course.setContent(newContent);
+                session.update(course);
+                tx.commit();
+                System.out.println("Kurs içeriği güncellendi.");
+            } else {
+                System.out.println("Kurs bulunamadı: " + courseId);
+            }
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            System.out.println("Hata oluştu: " + e.getMessage());
+        }
+    }
+
     public List<Course> searchCoursesByName(String searchCriteria, Map<String, String> filters) {
 
         List<Course> result = new ArrayList<>();
