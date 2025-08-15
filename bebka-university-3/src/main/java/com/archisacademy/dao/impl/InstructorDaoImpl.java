@@ -1,6 +1,5 @@
 package com.archisacademy.dao.impl;
 
-import com.archisacademy.dao.CourseStudentDao;
 import com.archisacademy.dao.InstructorDao;
 import com.archisacademy.model.Course;
 import com.archisacademy.model.CourseStudent;
@@ -73,7 +72,7 @@ public class InstructorDaoImpl implements InstructorDao {
             transaction = session.beginTransaction();
 
             Instructor instructor = session.createQuery(
-                    "FROM Instructor WHERE instructorNumber = :instructorNumber", Instructor.class)
+                            "FROM Instructor WHERE instructorNumber = :instructorNumber", Instructor.class)
                     .setParameter("instructorNumber", instructorNumber)
                     .uniqueResult();
 
@@ -255,12 +254,69 @@ public class InstructorDaoImpl implements InstructorDao {
                     .setParameter("instructorId", instructorId)
                     .uniqueResult();
             System.out.println(highestGrade);
-            }
+        }
 
         catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-}
 
+    // --- YENİ EKLENEN METOT ---
+    @Override
+    public double calculateOverallAttendanceRate(long instructorId) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Instructor instructor = session.get(Instructor.class, instructorId);
+
+            if (instructor == null) {
+                System.err.println("Hata: " + instructorId + " ID'li eğitmen bulunamadı.");
+                return 0.0;
+            }
+
+            List<Course> taughtCourses = instructor.getTaughtCourses();
+            if (taughtCourses == null || taughtCourses.isEmpty()) {
+                System.out.println("Bilgi: Eğitmenin üzerine kayıtlı kurs bulunmuyor.");
+                return 0.0;
+            }
+
+            long totalEnrolled = 0;
+            long totalAttended = 0;
+
+            for (Course course : taughtCourses) {
+                // Course entity'sinde CourseStudent listesini getiren bir metod olduğunu varsayıyoruz.
+                // Eğer bu metodun adı farklıysa (örn: getRegistrations), burada onu kullanmalısınız.
+                List<CourseStudent> courseStudents = course.getCourseStudents();
+
+                if (courseStudents != null) {
+                    for (CourseStudent cs : courseStudents) {
+                        totalEnrolled++;
+
+                        if (cs.isAttended()) {
+                            totalAttended++;
+                        }
+                    }
+                }
+            }
+
+            transaction.commit();
+
+            if (totalEnrolled == 0) {
+                System.out.println("Bilgi: Eğitmenin kurslarına kayıtlı hiç öğrenci yok.");
+                return 0.0;
+            }
+
+            return (double) totalAttended / totalEnrolled;
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.err.println("Katılım oranı hesaplanırken bir hata oluştu: " + e.getMessage());
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+}
