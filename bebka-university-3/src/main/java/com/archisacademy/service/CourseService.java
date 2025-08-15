@@ -22,15 +22,15 @@ public class CourseService {
     }
 
 
-    public Course addCourse(String courseName, long courseNumber, long courseHour,List<Student> enrolledStudents,Instructor instructor) {
-        Course course = new Course(courseName, courseNumber,courseHour);
+    public Course addCourse(String courseName, long courseNumber, long courseHour,List<Student> enrolledStudents,Instructor instructor, String content) {
+        Course course = new Course(courseName, courseNumber,courseHour,content);
         course.setCourseInstructor(instructor);
         course.setEnrolledStudents(enrolledStudents);
         return courseDao.addCourse(course);
     }
 
-    public void updateCourse(String courseName, long courseNumber,long  courseHour, Instructor instructor) {
-        Course course = new Course(courseName, courseNumber,courseHour);
+    public void updateCourse(String courseName, long courseNumber,long  courseHour, Instructor instructor, String content) {
+        Course course = new Course(courseName, courseNumber,courseHour,content);
         course.setCourseInstructor(instructor);
         courseDao.updateCourse(course);
     }
@@ -153,6 +153,13 @@ public class CourseService {
             );
         }
         return reports;
+    }
+    public Course getCourseById(long courseId) {
+        return courseDao.findByCourseId(courseId);
+    }
+
+    public void updateCourseContent(long courseId, String newContent) {
+        courseDao.updateCourseContent(courseId, newContent);
     }
 }
 
