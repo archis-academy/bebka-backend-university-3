@@ -15,9 +15,9 @@ public class InstructorService {
     }
 
     public Instructor createInstructor(String instructorName,long instructorNumber,String email,String password) {
-            Instructor instructor=new Instructor(instructorName,instructorNumber,email,password);
-            instructorDao.createInstructor(instructor);
-            return instructor;
+        Instructor instructor=new Instructor(instructorName,instructorNumber,email,password);
+        instructorDao.createInstructor(instructor);
+        return instructor;
     }
 
     public void deleteInstructor(long instructorNumber) {
@@ -70,5 +70,25 @@ public class InstructorService {
     public void getInstructorsHighestNote(long instructorId)
     {
         instructorDao.getInstructorsHighestNote(instructorId);
+    }
+
+    // --- YENİ EKLENEN METOT ---
+    /**
+     * Belirtilen eğitmenin tüm kurslarındaki genel katılım oranını hesaplar.
+     * @param instructorId Eğitmen ID'si.
+     * @return Katılım oranı (double).
+     */
+    public double calculateOverallAttendanceRate(long instructorId) {
+        if (instructorId <= 0) {
+            System.err.println("Hata: Geçersiz Eğitmen ID'si.");
+            return 0.0;
+        }
+
+        System.out.println(instructorId + " ID'li eğitmen için katılım oranı hesaplanıyor...");
+
+        double rate = instructorDao.calculateOverallAttendanceRate(instructorId);
+
+        System.out.println("Hesaplama tamamlandı.");
+        return rate;
     }
 }
